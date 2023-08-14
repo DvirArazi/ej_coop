@@ -17,25 +17,26 @@ export default function initSocketIoServer(httpServer: http.Server) {
     // checkId
     //=========
     socket.on("checkId", (cookieId, callback) => {
-      let userServerI: number;
+      let userServer: UserServer | undefined;
       if (
         cookieId == undefined ||
-        (userServerI = users.findIndex((value) => value.cookieId == cookieId)) == -1 
+        (userServer = users.find((value) => value.cookieId == cookieId)) == undefined
       ) {
-        users.push({
+        userServer = {
           socketId: socket.id,
           cookieId: uuidv4(),
           name: "",
-          roles: []
-        });
+          associantions: []
+        };
+        users.push(userServer);
       }
       else {
-        console.log("Reconnection");
-        users[userServerI].socketId = socket.id;
+        userServer.socketId = socket.id;
+        console.log("user after reconnection: ", userServer);
       }
 
-      callback(users[userServerI].cookieId);
-      socket.emit("identified", userServerToUser(users[userServerI]));
+      callback(userServer.cookieId);
+      socket.emit("identified", userServerToUser(userServer));
     });
 
 
@@ -65,17 +66,20 @@ export default function initSocketIoServer(httpServer: http.Server) {
         personalitiesIds: [],
         attemptsLeft: 3,
       });
+      user.associantions.push({
+        roomcode: roomcode,
+        role: "storyteller",
+      });
 
       callback(roomcode);
     });
 
-    //=============
-    // getGameData
-    //=============
-    socket.on("getGameData", (roomcode, callback) => {
+    //===========
+    // enterRoom
+    //===========
+    socket.on("enterRoom", (roomcode, callback) => {
       callback((() => {
         const user = users.find(value => value.socketId == socket.id);
-        console.log(user);
         if (user == undefined) return undefined;
         const room = rooms.find(value => value.code == roomcode);
         if (room == undefined) return undefined;
@@ -100,6 +104,13 @@ export default function initSocketIoServer(httpServer: http.Server) {
       })());
     });
 
+    //===============
+    // doesRoomExist
+    //===============
+    socket.on("doesRoomExist", (roomcode, callback) => {
+      callback(rooms.find(room => room.code == roomcode) != undefined);      
+    });
+
     //============
     // disconnect
     //============
@@ -112,7 +123,7 @@ export default function initSocketIoServer(httpServer: http.Server) {
 function userServerToUser(userServer: UserServer): User {
   return {
     name: userServer.name,
-    roles: userServer.roles,
+    associantions: userServer.associantions,
   };
 }
 

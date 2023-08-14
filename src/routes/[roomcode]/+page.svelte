@@ -4,6 +4,7 @@
   import { goto } from "$app/navigation";
   import { error } from "@sveltejs/kit";
   import type { GameData } from "src/shared/types";
+    import Storyteller from "src/routes/[roomcode]/storyteller.svelte";
 
   export let data: PageData;
   const roomcode = data.params.roomcode;
@@ -13,14 +14,20 @@
   }
   let gameData: GameData | undefined = undefined;
 
-  console.log("test goto");
-
-  SOCKET.emit("getGameData", roomcode, (gameDataNew) => {
+  SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     if (gameDataNew == undefined)
       throw error(404, `Room ${roomcode} could not be found.`);
 
     gameData = gameDataNew;
-});
+  });
 </script>
 
-<p>{gameData}</p>
+{#if gameData != undefined}
+  {#if gameData.role == "storyteller"}
+    <Storyteller roomcode={roomcode} gameData={gameData}></Storyteller>
+  {:else}
+    <p>{gameData}</p>
+  {/if}
+{:else}
+  <p>{"Loading"}</p>
+{/if}

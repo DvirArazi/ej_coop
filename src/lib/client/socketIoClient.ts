@@ -8,12 +8,16 @@ import { getCookie, setCookie } from "typescript-cookie";
 
 export let SOCKET: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 
-export function initSocketIoClient() {
-  onMount(() => {
-    SOCKET.emit("checkId", getCookie("id"), (idNew) => {
-      if (idNew == null) return;
+export async function initSocketIoClient(): Promise<void> {
+  return new Promise<void>((resolve)=>{
+    onMount(() => {
+      SOCKET.emit("checkId", getCookie("id"), (idNew) => {
+        if (idNew == null) return;
+  
+        setCookie("id", idNew);
+      });
 
-      setCookie("id", idNew);
+      resolve();
     });
   });
 }

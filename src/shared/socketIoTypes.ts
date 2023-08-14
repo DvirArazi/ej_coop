@@ -2,6 +2,7 @@ import type { GameData, User } from "src/shared/types";
 
 export interface ServerToClientEvents {
   identified: (user: User) => void;
+  gameDataUpdated: (gameData: GameData) => void;
 }
 
 export interface ClientToServerEvents {
@@ -11,5 +12,6 @@ export interface ClientToServerEvents {
   ) => void;
   updateName: (name: string) => void;
   createRoom: (callback: (roomcode: string) => void) => void;
-  getGameData: (roomcode: string, callback: (gameData: GameData | undefined) => void) => void;
+  doesRoomExist: (roomcode: string, callback: (roomExists: boolean) => void) => void;
+  enterRoom: (roomcode: string, callback: (gameData: GameData | undefined) => void) => void;
 }

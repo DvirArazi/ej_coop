@@ -1,6 +1,6 @@
 export type User = {
   name: string,
-  roles: Association[],
+  associantions: Association[],
 }
 
 export type Association = {

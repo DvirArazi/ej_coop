@@ -1,11 +1,16 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-import { SOCKET } from "src/lib/client/socketIoClient";
-  import { onMount } from "svelte";
-
-  let name: string;
+  import Button from "src/components/button.svelte";
+  import Container from "src/components/container.svelte";
+  import Spacer from "src/components/spacer.svelte";
+  import { SOCKET } from "src/lib/client/socketIoClient";
 
   let identified = false;
+
+  let name = "";
+  let roomcode = "";
+  let joinEnabled = false;
+  let noRoom = false;
 
   SOCKET.on("identified", (user) => {
     name = user.name;
@@ -19,37 +24,107 @@ import { SOCKET } from "src/lib/client/socketIoClient";
     }
   }
 
+  $: {
+    joinEnabled = name != "" && roomcode.length == 4;
+  }
+
   function createRoom() {
-    SOCKET.emit("createRoom", (roomcode) => {
+    SOCKET.emit("createRoom", (roomcodeNew) => {
+      goto(`/${roomcodeNew}`);
+    });
+  }
+
+  function joinRoom() {
+    SOCKET.emit("doesRoomExist", roomcode, (roomExists) => {
+      noRoom = !roomExists;
+      if (noRoom) return;
+
       goto(`/${roomcode}`);
     });
   }
+
+  function handleRoomcodeInput() {
+    roomcode = roomcode.toUpperCase().substring(0, 4);
+    noRoom = false;
+  }
 </script>
 
-<div>{"Everybody's Jim"}</div>
+<div class="title title0">{"EVERYBODY'S"}</div>
+<div class="title title1">{"JIM"}</div>
 
-<button on:click={createRoom}>{"Create a Room"}</button>
+<Spacer space={30} />
 
-<div class="box">
-  <div>
-    <span>
-      {"Your Name:"} <input type="text" bind:value={name} />
-    </span>
-  </div>
-  <div>
-    <span>
-      {"Room Code:"} <input type="text" />
-    </span>
-  </div>
-  <button>{"Join a Room"}</button>
-</div>
+<Button onClick={createRoom}>{"Create a Room"}</Button>
+
+<Spacer space={30} />
+
+<Container>
+  <table>
+    <tr>
+      <td class="text">{"Your Name:"}</td>
+      <td class="line"><input type="text" bind:value={name} /></td>
+    </tr>
+    <Spacer space={10} />
+    <tr>
+      <td class="text">{"Room Code:"}</td>
+      <td class="line">
+        <input
+          type="text"
+          class="roomcode"
+          bind:value={roomcode}
+          placeholder="XXXX"
+          on:input={handleRoomcodeInput}
+        />
+      </td>
+    </tr>
+  </table>
+  <Spacer space={40} />
+  <Button onClick={joinRoom} enabled={joinEnabled}>
+    {"Join a Room"}
+  </Button>
+
+  {#if noRoom}
+    <Spacer space={10} />
+    <div class="red">{"Room does not exist"}</div>
+  {/if}
+
+  <Spacer space={5} />
+</Container>
+
+<Spacer space={30} />
 
 <div>
   {"Return to:"}
 </div>
 
 <style>
-  .box {
-    border-style: solid;
+  td {
+    box-sizing: border-box;
+  }
+  input[type="text"] {
+    text-align: center;
+  }
+  .title {
+    font-family: "Secular One";
+  }
+  .title0 {
+    font-size: 50px;
+  }
+  .title1 {
+    font-size: 210px;
+    line-height: 150px;
+  }
+  .text {
+    min-width: 180px;
+    /* padding-right: 10px; */
+  }
+  .line {
+    padding: 0 10px;
+  }
+  .roomcode {
+    letter-spacing: 5px;
+  }
+  .red {
+    color: rgb(255, 0, 0);
   }
 </style>

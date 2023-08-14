@@ -1,10 +1,16 @@
 <script lang="ts">
+  import "src/css/global.css";
   import { initSocketIoClient } from "src/lib/client/socketIoClient";
-  import { onMount } from "svelte";
 
-  // onMount(() => {
-    initSocketIoClient();
-  // });
+  let ready = false;
+
+  async function init() {
+    await initSocketIoClient();
+    ready = true;
+  }
+  init();
 </script>
 
-<slot />
+{#if ready}
+  <slot />
+{/if}

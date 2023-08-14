@@ -1,0 +1,43 @@
+.rubik,
+body,
+textarea,
+input[type="text"] {
+  font-family: 'Rubik';
+  font-size: 30px;
+  font-weight: 900;
+}
+
+body {
+  text-align: center;
+  background-color: rgb(155, 255, 255);
+
+}
+
+textarea {
+  background-color: transparent;
+  border-style: unset;
+  border-bottom: 2px solid rgb(0, 0, 0);
+  outline: none;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="text"] {
+  background-color: transparent;
+  border-style: unset;
+  border-bottom: 2px solid rgb(0, 0, 0);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'Secular One';
+  src: url('/fonts/SecularOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('/fonts/Rubik-Regular.ttf');
+}
