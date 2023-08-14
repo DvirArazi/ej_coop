@@ -1,12 +1,55 @@
 import type { Server } from "socket.io";
-import type { Room, UserServer } from "src/lib/server/types";
+import type { EventNames, EventParams, EventsMap } from "socket.io/dist/typed-events";
+import type { Room, User } from "src/lib/server/types";
 import type { ClientToServerEvents, ServerToClientEvents } from "src/shared/socketIoTypes";
+import type { GameData } from "src/shared/types";
+import { v4 as uuidv4 } from 'uuid';
 
 export class Game {
-  private _users: UserServer[] = [];
+  private _io: Server<ClientToServerEvents, ServerToClientEvents>;
+  private _users: User[] = [];
   private _rooms: Room[] = [];
 
-  createRoom(storyteller: UserServer): string {
+  constructor(io: Server<ClientToServerEvents, ServerToClientEvents>) {
+    this._io = io;
+  }
+
+  findUserById(id: String): User | undefined {
+    return this._users.find(user => user.id == id);
+  }
+
+  findUserBySocketId(socketId: String): User | undefined {
+    return this._users.find(user => user.socketId == socketId);
+  }
+
+  findRoomByRoomcode(roomcode: string) {
+    return this._rooms.find(room => room.code == roomcode);
+  }
+
+  addUser(socketId: string): User {
+    const user = {
+      id: uuidv4(),
+      socketId: socketId,
+      name: "",
+      rooms: []
+    };
+
+    this._users.push(user);
+
+    return user;
+  }
+
+  updateUserName(user: User, nameNew: string) {
+    user.name = nameNew;
+
+    for (let room of user.rooms) {
+      let gameData = this.getGameData(room, user);
+
+      this.emitGameDataUpdate(room, gameData);
+    }
+  }
+
+  createRoom(storyteller: User): string {
     const roomcode = this.generateRoomcode();
     const room = {
       code: roomcode,
@@ -18,19 +61,24 @@ export class Game {
     this._rooms.push(room);
     storyteller.rooms.push(room);
 
-    return "";
+    return roomcode;
   }
 
-  updateUserName(user: UserServer, nameNew: string) {
-    user.name = nameNew;
+  addPersonality(room: Room, user: User) {
+    room.personalities.push(user);
+    user.rooms.push(room);
 
-    for (let room of user.rooms) {
-      //continue from here
+    const gameData = this.getGameData(room, user);
+
+    this.emitGameDataUpdate(room, gameData);
+  }
+
+  getGameData(room: Room, user: User): GameData {
+    return {
+      role: room.storyteller == user ? "storyteller" : "personality",
+      persNames: room.personalities.map(per => per.name),
+      attemptsLeft: room.attemptsLeft
     }
-  }
-
-  addPersonality(room: Room,) {
-
   }
 
   private generateRoomcode() {
@@ -48,4 +96,18 @@ export class Game {
 
     return roomcode;
   }
+
+  private emitGameDataUpdate(room: Room, gameData: GameData) {
+    this._io.to(room.storyteller.id).emit("gameDataUpdated", gameData);
+    for (const per of room.personalities) {
+      this._io.to(per.id).emit("gameDataUpdated", gameData);
+    }
+  }
+
+  // private emitToRoom<EmitEvents extends EventsMap, Ev extends EventNames<ServerToClientEvents>>(room: Room, ev: Ev, ...args: EventParams<EmitEvents, Ev>) {
+  //   this._io.to(room.storyteller.id).emit(ev, ...args);
+  //   for (const per of room.personalities) {
+  //     this._io.to(per.id).emit(ev, ...args);
+  //   }
+  // }
 }

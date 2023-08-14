@@ -1,8 +1,3 @@
-export type User = {
-  name: string,
-  associantions: Association[],
-}
-
 export type Association = {
   roomcode: string,
   role: Role

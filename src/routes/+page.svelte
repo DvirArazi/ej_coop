@@ -12,8 +12,8 @@
   let joinEnabled = false;
   let noRoom = false;
 
-  SOCKET.on("identified", (user) => {
-    name = user.name;
+  SOCKET.on("identified", (nameNew, associations) => {
+    name = nameNew;
 
     identified = true;
   });

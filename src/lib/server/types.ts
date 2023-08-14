@@ -1,7 +1,5 @@
-import type { User } from "src/shared/types";
-
-export type UserServer = {
-  cookieId: string,
+export type User = {
+  id: string,
   socketId: string,
   name: string,
   rooms: Room[],
@@ -9,7 +7,7 @@ export type UserServer = {
 
 export type Room = {
   code: string,
-  storyteller: UserServer,
-  personalities: UserServer[],
+  storyteller: User,
+  personalities: User[],
   attemptsLeft: number,
 }

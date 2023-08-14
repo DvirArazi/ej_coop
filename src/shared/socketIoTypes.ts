@@ -1,14 +1,14 @@
-import type { GameData, User } from "src/shared/types";
+import type { Association, GameData } from "src/shared/types";
 
 export interface ServerToClientEvents {
-  identified: (user: User) => void;
+  identified: (name: string, associations: Association[]) => void;
   gameDataUpdated: (gameData: GameData) => void;
 }
 
 export interface ClientToServerEvents {
   checkId: (
-    cookieId: string | undefined,
-    callback: (cookieIdNew: string | undefined) => void
+    id: string | undefined,
+    callback: (idNew: string | undefined) => void
   ) => void;
   updateName: (name: string) => void;
   createRoom: (callback: (roomcode: string) => void) => void;
