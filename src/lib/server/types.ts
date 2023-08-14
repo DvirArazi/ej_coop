@@ -3,11 +3,13 @@ import type { User } from "src/shared/types";
 export type UserServer = {
   cookieId: string,
   socketId: string,
-} & User;
+  name: string,
+  rooms: Room[],
+};
 
 export type Room = {
   code: string,
-  storytellerId: string,
-  personalitiesIds: string[],
+  storyteller: UserServer,
+  personalities: UserServer[],
   attemptsLeft: number,
 }

@@ -1,5 +1,6 @@
 import type * as http from "http";
 import { Server } from "socket.io";
+import { Game } from "src/lib/server/game";
 import type { Room, UserServer } from "src/lib/server/types";
 import type { ClientToServerEvents, ServerToClientEvents } from "src/shared/socketIoTypes";
 import type { Role, User } from "src/shared/types";
@@ -7,11 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function initSocketIoServer(httpServer: http.Server) {
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer);
-  const users: UserServer[] = [];
-  const rooms: Room[] = [];
+  const game = new Game();
 
   io.on("connection", (socket) => {
-
+    
 
     //=========
     // checkId
@@ -26,7 +26,7 @@ export default function initSocketIoServer(httpServer: http.Server) {
           socketId: socket.id,
           cookieId: uuidv4(),
           name: "",
-          associantions: []
+          rooms: []
         };
         users.push(userServer);
       }
@@ -59,17 +59,15 @@ export default function initSocketIoServer(httpServer: http.Server) {
       if (user == undefined) return;
 
       const roomcode = generateRoomcode(rooms.map(room => room.code));
-
-      rooms.push({
+      const room = {
         code: roomcode,
-        storytellerId: user.cookieId,
-        personalitiesIds: [],
+        storyteller: user,
+        personalities: [],
         attemptsLeft: 3,
-      });
-      user.associantions.push({
-        roomcode: roomcode,
-        role: "storyteller",
-      });
+      }
+
+      rooms.push(room);
+      user.rooms.push(room);
 
       callback(roomcode);
     });
@@ -85,19 +83,24 @@ export default function initSocketIoServer(httpServer: http.Server) {
         if (room == undefined) return undefined;
 
         let role: Role;
-        if (room.storytellerId == user.cookieId) {
+        if (room.storyteller == user.cookieId) {
           role = "storyteller";
         }
-        else if (room.personalitiesIds.includes(user.cookieId)) {
+        else if (room.personalities.includes(user.cookieId)) {
           role = "personality";
         } else {
-          room.personalitiesIds.push(user.cookieId);
           role = "personality";
+          room.personalities.push(user.cookieId);
+          user.associantions.push({
+            role: role,
+            roomcode: roomcode,
+          });
+
         }
 
         return {
           role: role,
-          persNames: room.personalitiesIds
+          persNames: room.personalities
             .map(id => users.find(user => user.cookieId == id)!.name),
           attemptsLeft: room.attemptsLeft,
         };
@@ -108,7 +111,7 @@ export default function initSocketIoServer(httpServer: http.Server) {
     // doesRoomExist
     //===============
     socket.on("doesRoomExist", (roomcode, callback) => {
-      callback(rooms.find(room => room.code == roomcode) != undefined);      
+      callback(rooms.find(room => room.code == roomcode) != undefined);
     });
 
     //============
@@ -125,20 +128,4 @@ function userServerToUser(userServer: UserServer): User {
     name: userServer.name,
     associantions: userServer.associantions,
   };
-}
-
-function generateRoomcode(roomcodes: string[]) {
-  const aCode = "A".charCodeAt(0);
-  const zCode = "Z".charCodeAt(0);
-
-  let roomcode = "";
-  do {
-    for (let i = 0; i < 4; i++) {
-      roomcode += String.fromCharCode(
-        aCode + Math.floor(Math.random() * (zCode - aCode + 1))
-      );
-    }
-  } while (roomcodes.includes(roomcode));
-
-  return roomcode;
 }
