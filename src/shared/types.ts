@@ -1,12 +1,25 @@
 export type Association = {
   roomcode: string,
-  role: Role
+  isStoryteller: boolean
 }
 
-export type Role = "storyteller" | "personality";
+export type GameData =
+  {
+    isStoryteller: true,
+    storytellerData: StorytellerData,
+  } |
+  {
+    isStoryteller: false,
+    personalityData: PersonalityData,
+  }
 
-export type GameData = {
-  role: Role,
-  persNames: string[],
+export type StorytellerData = {
+  personalitiesNames: string[],
+  attemptsLeft: number,
+}
+
+export type PersonalityData = {
+  name: string,
+  personalitiesNames: string[],
   attemptsLeft: number,
 }

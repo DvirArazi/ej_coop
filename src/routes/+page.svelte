@@ -1,9 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Button from "src/components/button.svelte";
-  import Container from "src/components/container.svelte";
-  import Spacer from "src/components/spacer.svelte";
-  import { SOCKET } from "src/lib/client/socketIoClient";
+  import Button from "/@src/components/button.svelte";
+  import Container from "/@src/components/container.svelte";
+    import Modal from "/@src/components/modal.svelte";
+  import Spacer from "/@src/components/spacer.svelte";
+  import { SOCKET } from "/@src/lib/client/socketIoClient";
 
   let identified = false;
 
@@ -17,12 +18,6 @@
 
     identified = true;
   });
-
-  $: {
-    if (identified) {
-      SOCKET.emit("updateName", name);
-    }
-  }
 
   $: {
     joinEnabled = name != "" && roomcode.length == 4;
@@ -43,11 +38,23 @@
     });
   }
 
-  function handleRoomcodeInput() {
+  function handleRoomcodeInputChange() {
     roomcode = roomcode.toUpperCase().substring(0, 4);
     noRoom = false;
   }
+
+  function handleNameInputChange() {
+    if (identified) {
+      SOCKET.emit("updateName", name);
+    }
+  }
 </script>
+
+<Modal
+  showModal={true}
+>
+  {"just some text"}
+</Modal>
 
 <div class="title title0">{"EVERYBODY'S"}</div>
 <div class="title title1">{"JIM"}</div>
@@ -62,7 +69,13 @@
   <table>
     <tr>
       <td class="text">{"Your Name:"}</td>
-      <td class="line"><input type="text" bind:value={name} /></td>
+      <td class="line">
+        <input
+          type="text"
+          bind:value={name}
+          on:input={handleNameInputChange}
+        />
+      </td>
     </tr>
     <Spacer space={10} />
     <tr>
@@ -73,7 +86,7 @@
           class="roomcode"
           bind:value={roomcode}
           placeholder="XXXX"
-          on:input={handleRoomcodeInput}
+          on:input={handleRoomcodeInputChange}
         />
       </td>
     </tr>

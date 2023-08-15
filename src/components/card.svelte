@@ -1,13 +1,17 @@
 <script lang="ts">
-  import Spacer from "src/components/spacer.svelte";
+  import Spacer from "/@src/components/spacer.svelte";
 
   export let name: String;
-  export let attemptsC: number | undefined;
+  export let attemptsC: number | undefined = undefined;
 </script>
 
 <div class="outer">
-  <div class="name">
-    {name}
+  <div class={`name`}>
+    {#if name != ""}
+      {name}
+    {:else}
+      <div class="unnamed">{"Unnamed"}</div>
+    {/if}
   </div>
   {#if attemptsC != undefined}
     <div class="attempts">
@@ -37,6 +41,10 @@
   .name {
     text-align: left;
     width: 100%;
+  }
+  .unnamed {
+    color: rgb(109, 109, 109);
+    font-style: italic;
   }
   .attempts {
     white-space: nowrap;

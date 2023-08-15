@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { SOCKET } from "src/lib/client/socketIoClient";
+  import { SOCKET } from "/@src/lib/client/socketIoClient";
   import type { PageData } from "./$types";
   import { goto } from "$app/navigation";
   import { error } from "@sveltejs/kit";
-  import type { GameData } from "src/shared/types";
-    import Storyteller from "src/routes/[roomcode]/storyteller.svelte";
+  import type { GameData } from "/@src/shared/types";
+  import Storyteller from "/@src/routes/[roomcode]/storyteller.svelte";
+  import Personality from "/@src/routes/[roomcode]/personality.svelte";
 
   export let data: PageData;
   const roomcode = data.params.roomcode;
@@ -23,11 +24,11 @@
 </script>
 
 {#if gameData != undefined}
-  {#if gameData.role == "storyteller"}
-    <Storyteller roomcode={roomcode} gameData={gameData}></Storyteller>
+  {#if gameData.isStoryteller}
+    <Storyteller {roomcode} storytellerData={gameData.storytellerData} />
   {:else}
-    <p>{gameData}</p>
+    <Personality {roomcode} personalityData={gameData.personalityData} />
   {/if}
 {:else}
-  <p>{"Loading"}</p>
+  <p>{"Loading..."}</p>
 {/if}

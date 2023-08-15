@@ -1,17 +1,22 @@
 <script lang="ts">
-  import Button from "src/components/button.svelte";
-  import Card from "src/components/card.svelte";
-  import Container from "src/components/container.svelte";
-  import Spacer from "src/components/spacer.svelte";
-  import { SOCKET } from "src/lib/client/socketIoClient";
-  import type { GameData } from "src/shared/types";
+  import Button from "/@src/components/button.svelte";
+  import Spacer from "/@src/components/spacer.svelte";
+  import { SOCKET } from "/@src/lib/client/socketIoClient";
+  import PerList from "/@src/routes/[roomcode]/perList.svelte";
+  import type { GameData, StorytellerData } from "/@src/shared/types";
 
   export let roomcode: string;
-  export let gameData: GameData;
+  export let storytellerData: StorytellerData;
 
-  SOCKET.on("gameDataUpdated", (gameDataNew) => {
-    gameData = gameDataNew;
+  SOCKET.on("storytellerDataUpdated", (storytellerDataNew) => {
+    storytellerData = storytellerDataNew;
   });
+
+  function onShareClick() {
+    navigator.share({
+      url: window.location.origin + "/" + roomcode,
+    });
+  }
 </script>
 
 <div class="title">{`Room: ${roomcode}`}</div>
@@ -22,16 +27,25 @@
 
 <Spacer space={30} />
 
-<Button onClick={() => {}}>{"Start Action"}</Button>
+<Button onClick={onShareClick}>{"Share Room Link"}</Button>
 
 <Spacer space={30} />
 
-<div>{"Personalities:"}</div>
-<Container>
-  {#each gameData.persNames as name, i}
-    <Card {name} attemptsC={gameData.attemptsLeft} />
-  {/each}
-</Container>
+<PerList
+  personalitiesNames={storytellerData.personalitiesNames}
+  attemptsLeft={storytellerData.attemptsLeft}
+/>
+
+<Spacer space={30} />
+
+<Button
+  onClick={() => {}}
+  enabled={storytellerData.personalitiesNames.length >= 2}
+>
+  {"Start Action"}
+</Button>
+
+<Spacer space={30} />
 
 <style>
   .title {

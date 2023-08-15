@@ -1,6 +1,6 @@
 <script lang="ts">
-  import "src/css/global.css";
-  import { initSocketIoClient } from "src/lib/client/socketIoClient";
+  import "/@src/css/global.css";
+  import { initSocketIoClient } from "/@src/lib/client/socketIoClient";
 
   let ready = false;
 

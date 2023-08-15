@@ -1,9 +1,7 @@
 import type { Socket } from "socket.io";
-import type { Game } from "src/lib/server/game";
-import type { ClientToServerEvents, ServerToClientEvents } from "src/shared/socketIoTypes";
-import type { User } from "src/lib/server/types";
-import type { Role } from "src/shared/types";
-import { v4 as uuidv4 } from 'uuid';
+import type { Game } from "/@src/lib/server/game";
+import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/socketIoTypes";
+import type { User } from "/@src/lib/server/types";
 
 export function handleSocket(
   socket: Socket<ClientToServerEvents, ServerToClientEvents>,
@@ -20,7 +18,6 @@ export function handleSocket(
     }
     else {
       user.socketId = socket.id;
-      console.log("user after reconnection: ", user);
     }
 
     callback(user.id);
@@ -30,7 +27,7 @@ export function handleSocket(
       user.rooms.map(room => {
         return {
           roomcode: room.code,
-          role: room.storyteller == user ? "storyteller" : "personality"
+          isStoryteller: room.storyteller == user
         }
       })
     );
@@ -70,14 +67,14 @@ export function handleSocket(
       const room = game.findRoomByRoomcode(roomcode);
       if (room == undefined) return undefined;
 
-      let role: Role;
+      let isStoryteller: boolean;
       if (room.storyteller == user) {
-        role = "storyteller";
+        isStoryteller = true;
       }
       else if (room.personalities.includes(user)) {
-        role = "personality";
+        isStoryteller = false;
       } else {
-        role = "personality";
+        isStoryteller = false;
         game.addPersonality(room, user);
       }
 

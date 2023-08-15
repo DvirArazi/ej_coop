@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-// import type http from 'http';
-// import initSocketIoServer from './src/lib/server/socketIoServer';
-import { bla } from './bla';
+import type http from 'http';
+import initSocketIoServer from './src/lib/server/socketIoServer';
 
 export default defineConfig({
 	plugins: [
@@ -10,8 +9,13 @@ export default defineConfig({
 		{
 			name: 'vite-plugin-socket-io',
 			configureServer: (server) => {
-				bla(server)
+				initSocketIoServer(server.httpServer as http.Server);
 			},
 		},
 	],
+	resolve: {
+		alias: {
+			'/@src': './src'
+		},
+	},
 });

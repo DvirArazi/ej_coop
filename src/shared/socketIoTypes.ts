@@ -1,8 +1,9 @@
-import type { Association, GameData } from "src/shared/types";
+import type { Association, GameData, PersonalityData, StorytellerData } from "/@src/shared/types";
 
 export interface ServerToClientEvents {
   identified: (name: string, associations: Association[]) => void;
-  gameDataUpdated: (gameData: GameData) => void;
+  storytellerDataUpdated: (storytellerData: StorytellerData) => void;
+  personalityDataUpdated: (personalityData: PersonalityData) => void;
 }
 
 export interface ClientToServerEvents {
