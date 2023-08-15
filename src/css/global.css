@@ -1,6 +1,7 @@
 .rubik,
 body,
 textarea,
+canvas,
 input[type="text"] {
   font-family: 'Rubik';
   font-size: 30px;
@@ -29,14 +30,4 @@ input[type="text"] {
   outline: none;
   width: 100%;
   box-sizing: border-box;
-}
-
-@font-face {
-  font-family: 'Secular One';
-  src: url('/fonts/SecularOne-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik-Regular.ttf');
 }

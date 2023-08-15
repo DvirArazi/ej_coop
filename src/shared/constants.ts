@@ -1,0 +1,1 @@
+export const DIE_RESOLUTION = 10;
