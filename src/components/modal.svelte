@@ -4,6 +4,8 @@
   let dialog: HTMLDialogElement;
 
   $: if (dialog && showModal) dialog.showModal();
+
+  $: document.body.style.overflow = showModal ? "hidden" : "scroll";
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -24,18 +26,29 @@
     border: none;
     outline: none;
     background-color: transparent;
+    width: 100%;
+    height: 100%;
+
+    overflow-x: hidden;
   }
+
   .outer {
     background-color: white;
-    border-radius: 0.2em;
+    border-radius: 10px;
     box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    text-align: center;
+    margin: auto;
   }
+
   dialog::backdrop {
     background: rgba(0, 0, 0, 0.3);
   }
+
   dialog > div {
     padding: 1em;
   }
+
   dialog[open] {
     animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -47,6 +60,7 @@
       transform: scale(1);
     }
   }
+
   dialog[open]::backdrop {
     animation: fade 0.2s ease-out;
   }

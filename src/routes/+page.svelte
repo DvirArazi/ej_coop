@@ -2,10 +2,10 @@
   import { goto } from "$app/navigation";
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
-  import Modal from "/@src/components/modal.svelte";
+  import InitModal from "/@src/components/initModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
-  import Wheel from "/@src/components/wheel.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
+  import { DIE_RESOLUTION } from "/@src/shared/constants";
 
   let identified = false;
 
@@ -21,7 +21,7 @@
   });
 
   $: {
-    joinEnabled = name != "" && roomcode.length == 4;
+    joinEnabled = name !== "" && roomcode.length === 4;
   }
 
   function createRoom() {
@@ -49,11 +49,21 @@
       SOCKET.emit("updateName", name);
     }
   }
+
+  //remember to move that to storyteller
+  function handleRiskSet(riskNum: number) {
+    SOCKET.emit("riskSet", roomcode, riskNum / DIE_RESOLUTION);
+  }
 </script>
 
-<Modal showModal={true}>
-  <Wheel persNames={["Avishay", "Lioz", "Gal"]} failRatio={0.7} />
-</Modal>
+<!-- <Modal showModal={true}>
+  <Wheel
+    persNames={["Avishay", "Lioz", "Gal"]}
+    failRatio={0.7}
+    tiltAngle={0.3 * Math.PI}
+  />
+</Modal> -->
+<InitModal showModal={true} onRiskNumSet={handleRiskSet} />
 
 <div class="title title0">{"EVERYBODY'S"}</div>
 <div class="title title1">{"JIM"}</div>

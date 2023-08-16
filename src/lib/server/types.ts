@@ -1,3 +1,5 @@
+import type { PhaseData } from "/@src/shared/types";
+
 export type User = {
   id: string,
   socketId: string,
@@ -10,4 +12,5 @@ export type Room = {
   storyteller: User,
   personalities: User[],
   attemptsLeft: number,
+  phaseData: PhaseData,
 }

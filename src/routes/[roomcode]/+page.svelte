@@ -11,21 +11,21 @@
   const roomcode = data.params.roomcode;
   {
     let roomcodeUpper = roomcode.toUpperCase();
-    if (roomcode != roomcodeUpper) goto(`/${roomcodeUpper}`);
+    if (roomcode !== roomcodeUpper) goto(`/${roomcodeUpper}`);
   }
   let gameData: GameData | undefined = undefined;
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
-    if (gameDataNew == undefined)
+    if (gameDataNew === undefined)
       throw error(404, `Room ${roomcode} could not be found.`);
 
     gameData = gameDataNew;
   });
 </script>
 
-{#if gameData != undefined}
+{#if gameData !== undefined}
   {#if gameData.isStoryteller}
-    <Storyteller {roomcode} storytellerData={gameData.storytellerData} />
+    <Storyteller {roomcode} sttData={gameData.storytellerData} />
   {:else}
     <Personality {roomcode} personalityData={gameData.personalityData} />
   {/if}

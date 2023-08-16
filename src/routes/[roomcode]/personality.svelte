@@ -5,11 +5,11 @@
   import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
-  import type { PersonalityData } from "/@src/shared/types";
+  import type { PerData } from "/@src/shared/types";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
 
   export let roomcode: string;
-  export let personalityData: PersonalityData;
+  export let personalityData: PerData;
 
   let cheat: HTMLDivElement;
   let nameInputWidth: number;
@@ -27,7 +27,7 @@
 
   function updateNameInputWidth() {
     cheat.style.display = "block";
-    isNameInputEmpty = cheat.offsetWidth == 0;
+    isNameInputEmpty = cheat.offsetWidth === 0;
     if (isNameInputEmpty) {
       nameInputWidth = 300;
     } else {

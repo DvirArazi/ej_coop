@@ -7,13 +7,13 @@
 
 <div class="outer">
   <div class={`name`}>
-    {#if name != ""}
+    {#if name !== ""}
       {name}
     {:else}
       <div class="unnamed">{"Unnamed"}</div>
     {/if}
   </div>
-  {#if attemptsC != undefined}
+  {#if attemptsC !== undefined}
     <div class="attempts">
       <img src="svgs/stylus_note_FILL0_wght400_GRAD0_opsz48.svg" alt="write" />
       <Spacer space={8} />

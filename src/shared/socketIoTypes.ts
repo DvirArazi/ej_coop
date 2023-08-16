@@ -1,9 +1,9 @@
-import type { Association, GameData, PersonalityData, StorytellerData } from "/@src/shared/types";
+import type { Association, GameData, PerData, SttData } from "/@src/shared/types";
 
 export interface ServerToClientEvents {
   identified: (name: string, associations: Association[]) => void;
-  storytellerDataUpdated: (storytellerData: StorytellerData) => void;
-  personalityDataUpdated: (personalityData: PersonalityData) => void;
+  storytellerDataUpdated: (sttData: SttData) => void;
+  personalityDataUpdated: (perData: PerData) => void;
 }
 
 export interface ClientToServerEvents {
@@ -15,4 +15,5 @@ export interface ClientToServerEvents {
   createRoom: (callback: (roomcode: string) => void) => void;
   doesRoomExist: (roomcode: string, callback: (roomExists: boolean) => void) => void;
   enterRoom: (roomcode: string, callback: (gameData: GameData | undefined) => void) => void;
+  riskSet: (roomcode: string, risk: number) => void;
 }

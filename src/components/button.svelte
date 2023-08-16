@@ -18,19 +18,21 @@
   });
 </script>
 
-<button
-  style={`
+<div>
+  <button
+    style={`
     padding-bottom: ${isDown ? 0 : 7}px;
     margin-top: ${isDown ? 7 : 0}px;
   `}
-  on:mousedown={() => (isDown = true)}
-  on:mouseup={onClick}
-  disabled={!enabled}
->
-  <div class="front">
-    <slot />
-  </div>
-</button>
+    on:mousedown={() => (isDown = true)}
+    on:mouseup={onClick}
+    disabled={!enabled}
+  >
+    <div class="front">
+      <slot />
+    </div>
+  </button>
+</div>
 
 <style>
   button {

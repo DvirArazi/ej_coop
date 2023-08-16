@@ -12,7 +12,7 @@ export async function initSocketIoClient(): Promise<void> {
   return new Promise<void>((resolve) => {
     onMount(() => {
       SOCKET.emit("checkId", getCookie("id"), (idNew) => {
-        if (idNew == null) return;
+        if (idNew === null) return;
 
         setCookie("id", idNew);
       });

@@ -2,8 +2,9 @@ import type { Server } from "socket.io";
 import type { EventNames, EventParams, EventsMap } from "socket.io/dist/typed-events";
 import type { Room, User } from "/@src/lib/server/types";
 import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/socketIoTypes";
-import type { GameData } from "/@src/shared/types";
+import { Phase, type GameData } from "/@src/shared/types";
 import { v4 as uuidv4 } from 'uuid';
+import { DIE_RESOLUTION, VOTE_SECONDS } from "/@src/shared/constants";
 
 export class Game {
   private _io: Server<ClientToServerEvents, ServerToClientEvents>;
@@ -15,15 +16,15 @@ export class Game {
   }
 
   findUserById(id: String): User | undefined {
-    return this._users.find(user => user.id == id);
+    return this._users.find(user => user.id === id);
   }
 
   findUserBySocketId(socketId: String): User | undefined {
-    return this._users.find(user => user.socketId == socketId);
+    return this._users.find(user => user.socketId === socketId);
   }
 
   findRoomByRoomcode(roomcode: string) {
-    return this._rooms.find(room => room.code == roomcode);
+    return this._rooms.find(room => room.code === roomcode);
   }
 
   addUser(socketId: string): User {
@@ -49,11 +50,12 @@ export class Game {
 
   createRoom(storyteller: User): string {
     const roomcode = this.generateRoomcode();
-    const room = {
+    const room: Room = {
       code: roomcode,
       storyteller: storyteller,
       personalities: [],
       attemptsLeft: 3,
+      phaseData: { phase: Phase.Start }
     }
 
     this._rooms.push(room);
@@ -69,29 +71,43 @@ export class Game {
     this.emitGameDataUpdated(room);
   }
 
-  getGameData(room: Room, user: User): GameData {
+  // getGameData(room: Room, user: User): GameData {
+  //   const personalitiesNames = room.personalities.map(per => per.name);
 
-    const personalitiesNames = room.personalities.map(per => per.name);
+  //   return room.storyteller === user ?
+  //     {
+  //       isStoryteller: true,
+  //       storytellerData: {
+  //         persNames: personalitiesNames,
+  //         attemptsLeft: room.attemptsLeft,
+  //         phaseData: room.phaseData,
+  //       }
+  //     } :
+  //     {
+  //       isStoryteller: false,
+  //       personalityData: {
+  //         index: user.name,
+  //         personalitiesNames: personalitiesNames,
+  //         attemptsLeft: room.attemptsLeft,
+  //       }
+  //     }
+  // }
 
-    return room.storyteller == user ?
-      {
-        isStoryteller: true,
-        storytellerData: {
-          personalitiesNames: personalitiesNames,
-          attemptsLeft: room.attemptsLeft,
-        }
-      } :
-      {
-        isStoryteller: false,
-        personalityData: {
-          name: user.name,
-          personalitiesNames: personalitiesNames,
-          attemptsLeft: room.attemptsLeft,
-        }
-      }
+  setVotePhase(room: Room, risk: number): void {
+    room.phaseData = {
+      phase: Phase.Vote,
+      risk: risk,
+      timeLeft: VOTE_SECONDS,
+      votesFor: [
+        ...[true],
+        ...(new Array(room.personalities.length - 1).fill(undefined))
+      ]
+    }
+
+    this.emitGameDataUpdated(room);
   }
 
-  private generateRoomcode() {
+  private generateRoomcode(): string {
     const aCode = "A".charCodeAt(0);
     const zCode = "Z".charCodeAt(0);
 
@@ -107,11 +123,11 @@ export class Game {
     return roomcode;
   }
 
-  private emitGameDataUpdated(room: Room) {
+  private emitGameDataUpdated(room: Room): void {
     const personalitiesNames = room.personalities.map(per => per.name);
 
     this._io.to(room.storyteller.socketId).emit("storytellerDataUpdated", {
-      personalitiesNames: personalitiesNames,
+      persNames: personalitiesNames,
       attemptsLeft: room.attemptsLeft,
     });
     for (const per of room.personalities) {

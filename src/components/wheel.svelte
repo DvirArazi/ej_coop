@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { DIE_RESOLUTION } from "/@src/shared/constants";
-  import Spacer from "/@src/components/spacer.svelte";
 
   export let persNames: string[];
   export let failRatio: number;
+  export let tiltAngle: number;
 
   const w = 500;
   const h = 500;
@@ -116,7 +116,13 @@
     <canvas class="pointer" bind:this={pointerCanvas} width={w} height={h} />
   </div>
   <div class="padder" />
-  <canvas class="wheel" bind:this={wheelCanvas} width={w} height={h} />
+  <canvas
+    class="wheel"
+    bind:this={wheelCanvas}
+    width={w}
+    height={h}
+    style={`transform: rotate(${tiltAngle}rad);`}
+  />
 </div>
 
 <style>
@@ -126,13 +132,14 @@
   .wrapper {
     position: absolute;
     width: 100%;
-  }
-  .padder {
-    padding-top: 5%;
+    z-index: 10;
   }
   .pointer {
     width: 100%;
     height: 100%;
+  }
+  .padder {
+    padding-top: 5%;
   }
   .wheel {
     transform-origin: 50% 50%;
@@ -140,6 +147,6 @@
     height: 100%;
 
     border-radius: 100%;
-    box-shadow: 0px 3px 10px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
   }
 </style>

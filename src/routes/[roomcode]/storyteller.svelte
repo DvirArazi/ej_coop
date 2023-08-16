@@ -3,13 +3,13 @@
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
-  import type { GameData, StorytellerData } from "/@src/shared/types";
+  import type { GameData, SttData } from "/@src/shared/types";
 
   export let roomcode: string;
-  export let storytellerData: StorytellerData;
+  export let sttData: SttData;
 
-  SOCKET.on("storytellerDataUpdated", (storytellerDataNew) => {
-    storytellerData = storytellerDataNew;
+  SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
+    sttData = sttDataNew;
   });
 
   function onShareClick() {
@@ -28,20 +28,17 @@
 <Spacer space={30} />
 
 <Button onClick={onShareClick}>{"Share Room Link"}</Button>
-
+persNames
 <Spacer space={30} />
 
 <PerList
-  personalitiesNames={storytellerData.personalitiesNames}
-  attemptsLeft={storytellerData.attemptsLeft}
+  personalitiesNames={sttData.persNames}
+  attemptsLeft={sttData.attemptsLeft}
 />
 
 <Spacer space={30} />
 
-<Button
-  onClick={() => {}}
-  enabled={storytellerData.personalitiesNames.length >= 2}
->
+<Button onClick={() => {}} enabled={sttData.persNames.length >= 2}>
   {"Start Action"}
 </Button>
 
