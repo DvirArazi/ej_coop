@@ -9,8 +9,8 @@ export type User = {
 
 export type Room = {
   code: string,
-  storyteller: User,
-  personalities: User[],
+  stt: User,
+  pers: User[],
   attemptsLeft: number,
   phaseData: PhaseData,
 }

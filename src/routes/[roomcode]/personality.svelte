@@ -1,26 +1,26 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Button from "/@src/components/button.svelte";
-  import Card from "/@src/components/card.svelte";
-  import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
   import type { PerData } from "/@src/shared/types";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
 
   export let roomcode: string;
-  export let personalityData: PerData;
+  export let perData: PerData;
 
+  
   let cheat: HTMLDivElement;
   let nameInputWidth: number;
+  let name: string;
   let isNameInputEmpty = false;
 
-  SOCKET.on("personalityDataUpdated", (personalityDataNew) => {
-    personalityData = personalityDataNew;
+  SOCKET.on("personalityDataUpdated", (perDataNew) => {
+    perData = perDataNew;
+    name = perData.persNames[perData.index];
   });
 
   function handleNameInputChange() {
-    SOCKET.emit("updateName", personalityData.name);
+    SOCKET.emit("updateName", name);
 
     updateNameInputWidth();
   }
@@ -46,7 +46,7 @@
 
 <input
   type="text"
-  bind:value={personalityData.name}
+  bind:value={name}
   placeholder="Enter your name"
   on:input={handleNameInputChange}
   style={`
@@ -58,14 +58,14 @@
 <Spacer space={60} />
 
 <PerList
-  personalitiesNames={personalityData.personalitiesNames}
-  attemptsLeft={personalityData.attemptsLeft}
+  personalitiesNames={perData.persNames}
+  attemptsLeft={perData.attemptsLeft}
 />
 
 <div
   contenteditable="true"
   bind:this={cheat}
-  bind:innerText={personalityData.name}
+  bind:innerText={name}
   class="cheat"
 />
 

@@ -28,19 +28,21 @@
 <Spacer space={30} />
 
 <Button onClick={onShareClick}>{"Share Room Link"}</Button>
-persNames
-<Spacer space={30} />
-
-<PerList
-  personalitiesNames={sttData.persNames}
-  attemptsLeft={sttData.attemptsLeft}
-/>
 
 <Spacer space={30} />
 
-<Button onClick={() => {}} enabled={sttData.persNames.length >= 2}>
-  {"Start Action"}
-</Button>
+{#if sttData.persNames.length > 0}
+  <PerList
+    personalitiesNames={sttData.persNames}
+    attemptsLeft={sttData.attemptsLeft}
+  />
+
+  <Spacer space={30} />
+
+  <Button onClick={() => {}} enabled={sttData.persNames.length >= 2}>
+    {"Start Action"}
+  </Button>
+{/if}
 
 <Spacer space={30} />
 

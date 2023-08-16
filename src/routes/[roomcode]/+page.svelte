@@ -24,10 +24,10 @@
 </script>
 
 {#if gameData !== undefined}
-  {#if gameData.isStoryteller}
-    <Storyteller {roomcode} sttData={gameData.storytellerData} />
+  {#if gameData.isStt}
+    <Storyteller {roomcode} sttData={gameData.sttData} />
   {:else}
-    <Personality {roomcode} personalityData={gameData.personalityData} />
+    <Personality {roomcode} perData={gameData.perData} />
   {/if}
 {:else}
   <p>{"Loading..."}</p>

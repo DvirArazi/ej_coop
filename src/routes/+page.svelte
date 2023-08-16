@@ -63,7 +63,7 @@
     tiltAngle={0.3 * Math.PI}
   />
 </Modal> -->
-<InitModal showModal={true} onRiskNumSet={handleRiskSet} />
+<!-- <InitModal showModal={true} onRiskNumSet={handleRiskSet} /> -->
 
 <div class="title title0">{"EVERYBODY'S"}</div>
 <div class="title title1">{"JIM"}</div>

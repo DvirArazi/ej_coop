@@ -1,14 +1,14 @@
 export type Association = {
   roomcode: string,
-  isStoryteller: boolean
+  isStt: boolean
 }
 
 export type GameData = {
-  isStoryteller: true,
-  storytellerData: SttData,
+  isStt: true,
+  sttData: SttData,
 } | {
-  isStoryteller: false,
-  personalityData: PerData,
+  isStt: false,
+  perData: PerData,
 }
 
 export type SttData = {
@@ -19,22 +19,19 @@ export type SttData = {
 
 export type PerData = {
   index: number,
-  personalitiesNames: string[],
+  persNames: string[],
   attemptsLeft: number,
   phaseData: PhaseData,
 }
 
 export enum Phase {
   Start,
-  SetRisk,
   Vote,
   Spin,
 }
 
 export type PhaseData = {
   phase: Phase.Start,
-} | {
-  phase: Phase.SetRisk,
 } | {
   phase: Phase.Vote,
   risk: number,

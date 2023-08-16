@@ -52,8 +52,8 @@ export class Game {
     const roomcode = this.generateRoomcode();
     const room: Room = {
       code: roomcode,
-      storyteller: storyteller,
-      personalities: [],
+      stt: storyteller,
+      pers: [],
       attemptsLeft: 3,
       phaseData: { phase: Phase.Start }
     }
@@ -65,7 +65,7 @@ export class Game {
   }
 
   addPersonality(room: Room, user: User) {
-    room.personalities.push(user);
+    room.pers.push(user);
     user.rooms.push(room);
 
     this.emitGameDataUpdated(room);
@@ -100,7 +100,7 @@ export class Game {
       timeLeft: VOTE_SECONDS,
       votesFor: [
         ...[true],
-        ...(new Array(room.personalities.length - 1).fill(undefined))
+        ...(new Array(room.pers.length - 1).fill(undefined))
       ]
     }
 
@@ -124,19 +124,21 @@ export class Game {
   }
 
   private emitGameDataUpdated(room: Room): void {
-    const personalitiesNames = room.personalities.map(per => per.name);
+    const persNames = room.pers.map(per => per.name);
 
-    this._io.to(room.storyteller.socketId).emit("storytellerDataUpdated", {
-      persNames: personalitiesNames,
+    this._io.to(room.stt.socketId).emit("storytellerDataUpdated", {
+      persNames: persNames,
       attemptsLeft: room.attemptsLeft,
+      phaseData: room.phaseData,
     });
-    for (const per of room.personalities) {
+    room.pers.forEach((per, i)=>{
       this._io.to(per.socketId).emit("personalityDataUpdated", {
-        name: per.name,
-        personalitiesNames: personalitiesNames,
+        index: i,
+        persNames: persNames,
         attemptsLeft: room.attemptsLeft,
+        phaseData: room.phaseData,
       });
-    }
+    });
   }
 
   // private emitToRoom<EmitEvents extends EventsMap, Ev extends EventNames<ServerToClientEvents>>(room: Room, ev: Ev, ...args: EventParams<EmitEvents, Ev>) {

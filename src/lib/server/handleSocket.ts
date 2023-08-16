@@ -2,8 +2,8 @@ import type { Socket } from "socket.io";
 import type { Game } from "/@src/lib/server/game";
 import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/socketIoTypes";
 import type { User } from "/@src/lib/server/types";
-import { DIE_RESOLUTION } from "/@src/shared/constants";
 import { Phase, type GameData } from "/@src/shared/types";
+import { findIndexN } from "/@src/shared/funcs";
 
 export function handleSocket(
   socket: Socket<ClientToServerEvents, ServerToClientEvents>,
@@ -29,7 +29,7 @@ export function handleSocket(
       user.rooms.map(room => {
         return {
           roomcode: room.code,
-          isStoryteller: room.storyteller === user
+          isStt: room.stt === user
         }
       })
     );
@@ -67,38 +67,36 @@ export function handleSocket(
       const room = game.findRoomByRoomcode(roomcode);
       if (room === undefined) return undefined;
 
-      let isStoryteller: boolean;
-      if (room.storyteller === user) {
-        isStoryteller = true;
-      }
-      else if (room.personalities.includes(user)) {
-        isStoryteller = false;
-      } else {
-        isStoryteller = false;
+      const personalitiesNames = room.pers.map(per => per.name);
+
+      let isStt = room.stt === user;
+
+      if (!isStt && !room.pers.includes(user)) {
         game.addPersonality(room, user);
       }
 
-      //game.getGameData(room, user);
-      return room.storyteller === user ?
-      {
-        isStoryteller: true,
-        storytellerData: {
-          persNames: personalitiesNames,
-          attemptsLeft: room.attemptsLeft,
-          phaseData: room.phaseData,
-        }
-      } :
-      {
-        isStoryteller: false,
-        personalityData: {
-          index: user.name,
-          personalitiesNames: personalitiesNames,
-          attemptsLeft: room.attemptsLeft,
-          phaseData: room.phaseData
-        }
+      if (isStt) {
+        return {
+          isStt: true,
+          sttData: {
+            persNames: personalitiesNames,
+            attemptsLeft: room.attemptsLeft,
+            phaseData: room.phaseData,
+          }
+        };
+      } else {
+        return {
+          isStt: false,
+          perData: {
+            index: findIndexN(room.pers, per => per == user)!,
+            persNames: personalitiesNames,
+            attemptsLeft: room.attemptsLeft,
+            phaseData: room.phaseData
+          }
+        };
       }
     }
-    
+
     callback(inner());
   });
 
@@ -118,8 +116,8 @@ export function handleSocket(
     const room = game.findRoomByRoomcode(roomcode);
     if (room === undefined) return;
     if (
-      room.storyteller !== user ||
-      room.phaseData.phase !== Phase.SetRisk ||
+      room.stt !== user ||
+      room.phaseData.phase !== Phase.Start ||
       risk < 0 || risk > 1
     ) return;
 

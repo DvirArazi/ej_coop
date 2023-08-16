@@ -8,16 +8,16 @@
 </script>
 
 <Container>
-  <Card
-    name={personalitiesNames[0]}
-    attemptsC={attemptsLeft}
-  />
-  <Spacer space={20} />
-  <div class="line" />
-  {#each personalitiesNames.slice(1) as name, _}
-    <Spacer space={20} />
-    <Card {name} />
-  {/each}
+    <Card name={personalitiesNames[0]} attemptsC={attemptsLeft} />
+
+    {#if personalitiesNames.length > 1}
+      <Spacer space={20} />
+      <div class="line" />
+      {#each personalitiesNames.slice(1) as name, _}
+        <Spacer space={20} />
+        <Card {name} />
+      {/each}
+    {/if}
 </Container>
 
 <style>
