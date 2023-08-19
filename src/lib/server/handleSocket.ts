@@ -15,7 +15,7 @@ export function handleSocket(
   //=========
   socket.on("checkId", (id, callback) => {
     let user: User | null;
-    if (id == null || (user = game.findUserById(id)) == null) {
+    if (id === null || (user = game.findUserById(id)) === null) {
       user = game.addUser(socket.id);
     }
     else {
@@ -40,7 +40,7 @@ export function handleSocket(
   //============
   socket.on("updateName", name => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == null) return;
+    if (user === null) return;
 
     game.updateUserName(user, name);
   });
@@ -50,7 +50,7 @@ export function handleSocket(
   //============
   socket.on("createRoom", callback => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == null) return;
+    if (user === null) return;
 
     const roomcode = game.createRoom(user);
 
@@ -63,9 +63,9 @@ export function handleSocket(
   socket.on("enterRoom", (roomcode, callback) => {
     function inner(): GameData | null {
       const user = game.findUserBySocketId(socket.id);
-      if (user == null) return null;
+      if (user === null) return null;
       const room = game.findRoomByRoomcode(roomcode);
-      if (room == null) return null;
+      if (room === null) return null;
 
       let isStt = room.stt === user;
 
@@ -89,7 +89,7 @@ export function handleSocket(
         return {
           isStt: false,
           perData: {
-            index: findIndexN(room.pers, per => per == user)!,
+            index: findIndexN(room.pers, per => per === user)!,
             roomcode: roomcode,
             persNames: persNames,
             attemptsLeft: room.attemptsLeft,
@@ -114,9 +114,9 @@ export function handleSocket(
   //=========
   socket.on("riskSet", (roomcode, risk) => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == null) return;
+    if (user === null) return;
     const room = game.findRoomByRoomcode(roomcode);
-    if (room == null) return;
+    if (room === null) return;
     if (
       room.stt !== user ||
       room.phaseData.phase !== Phase.Start ||

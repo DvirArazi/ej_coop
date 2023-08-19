@@ -25,8 +25,9 @@ export class Game {
     return value !== undefined ? value : null;
   }
 
-  findRoomByRoomcode(roomcode: string) {
-    return this._rooms.find(room => room.code === roomcode);
+  findRoomByRoomcode(roomcode: string): Room | null {
+    const value = this._rooms.find(room => room.code === roomcode);
+    return value !== undefined ? value : null;
   }
 
   addUser(socketId: string): User {

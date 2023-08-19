@@ -17,7 +17,7 @@
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     // console.log("gameDataNew: ", gameDataNew);
-    // if (gameDataNew == null) {
+    // if (gameDataNew === null) {
     //   console.log("throwing");
     //   throw error(404, `Room ${roomcode} could not be found.`);
     // }
@@ -25,12 +25,12 @@
     gameData = gameDataNew;
   });
 
-  $: if (gameData == null) {
+  $: if (gameData === null) {
     throw error(404, `Room ${roomcode} could not be found.`);
   }
 </script>
 
-{#if gameData === "loading" || gameData == null}
+{#if gameData === "loading" || gameData === null}
   <p>{"Loading..."}</p>
 {:else if gameData.isStt}
   <Storyteller {roomcode} sttData={gameData.sttData} />
