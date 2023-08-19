@@ -1,16 +1,33 @@
 <script lang="ts">
-  export let showModal: boolean;
+  export let isOpen: boolean;
 
   let dialog: HTMLDialogElement;
 
-  $: if (dialog && showModal) dialog.showModal();
-
-  $: document.body.style.overflow = showModal ? "hidden" : "scroll";
+  $: if (dialog !== undefined) {
+    console.log("showModal", isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      dialog.classList.remove("closing");
+      dialog.showModal();
+    } else {
+      dialog.classList.add("closing");
+      // setTimeout(() => {
+      document.body.style.overflow = "auto";
+      dialog.classList.remove("closing");
+      dialog.close();
+      // }, 300); // Adjust this time to match your closing animation duration
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 
-<dialog bind:this={dialog} on:close={() => (showModal = false)}>
+<dialog
+  bind:this={dialog}
+  on:close={() => {
+    isOpen = false;
+  }}
+>
   <div class="outer">
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation>
@@ -39,6 +56,7 @@
     max-width: 500px;
     text-align: center;
     margin: auto;
+    user-select: none;
   }
 
   dialog::backdrop {
@@ -52,6 +70,7 @@
   dialog[open] {
     animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
   @keyframes zoom {
     from {
       transform: scale(0.95);
@@ -64,6 +83,7 @@
   dialog[open]::backdrop {
     animation: fade 0.2s ease-out;
   }
+
   @keyframes fade {
     from {
       opacity: 0;

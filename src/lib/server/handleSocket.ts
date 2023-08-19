@@ -67,19 +67,20 @@ export function handleSocket(
       const room = game.findRoomByRoomcode(roomcode);
       if (room === undefined) return undefined;
 
-      const personalitiesNames = room.pers.map(per => per.name);
-
       let isStt = room.stt === user;
 
       if (!isStt && !room.pers.includes(user)) {
         game.addPersonality(room, user);
       }
 
+      
+      const persNames = room.pers.map(per => per.name);
+
       if (isStt) {
         return {
           isStt: true,
           sttData: {
-            persNames: personalitiesNames,
+            persNames: persNames,
             attemptsLeft: room.attemptsLeft,
             phaseData: room.phaseData,
           }
@@ -89,7 +90,7 @@ export function handleSocket(
           isStt: false,
           perData: {
             index: findIndexN(room.pers, per => per == user)!,
-            persNames: personalitiesNames,
+            persNames: persNames,
             attemptsLeft: room.attemptsLeft,
             phaseData: room.phaseData
           }

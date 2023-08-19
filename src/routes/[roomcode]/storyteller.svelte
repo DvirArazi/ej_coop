@@ -1,14 +1,19 @@
 <script lang="ts">
   import Button from "/@src/components/button.svelte";
+  import InitModal from "/@src/components/initModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
-  import type { GameData, SttData } from "/@src/shared/types";
+  import { DIE_RESOLUTION } from "/@src/shared/constants";
+  import type { SttData } from "/@src/shared/types";
 
   export let roomcode: string;
   export let sttData: SttData;
 
+  let isInitModalOpen = false;
+
   SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
+    console.log("sttData: ", sttData);
     sttData = sttDataNew;
   });
 
@@ -16,6 +21,10 @@
     navigator.share({
       url: window.location.origin + "/" + roomcode,
     });
+  }
+
+  function handleRiskSet(riskNum: number) {
+    SOCKET.emit("riskSet", roomcode, riskNum / DIE_RESOLUTION);
   }
 </script>
 
@@ -39,12 +48,21 @@
 
   <Spacer space={30} />
 
-  <Button onClick={() => {}} enabled={sttData.persNames.length >= 2}>
+  <Button
+    onClick={() => (isInitModalOpen = true)}
+    enabled={sttData.persNames.length >= 2}
+  >
     {"Start Action"}
   </Button>
 {/if}
 
 <Spacer space={30} />
+
+<InitModal
+  isOpen={isInitModalOpen}
+  onRiskNumSet={handleRiskSet}
+  onClose={() => isInitModalOpen = false}
+/>
 
 <style>
   .title {

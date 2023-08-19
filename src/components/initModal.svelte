@@ -3,11 +3,11 @@
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
-  import { SOCKET } from "/@src/lib/client/socketIoClient";
   import { DIE_RESOLUTION } from "/@src/shared/constants";
 
-  export let showModal: boolean;
+  export let isOpen: boolean;
   export let onRiskNumSet: (riskNum: number) => void;
+  export let onClose: () => void;
 
   let riskNum: number = 0;
 
@@ -28,7 +28,13 @@
   }
 </script>
 
-<Modal {showModal}>
+<Modal {isOpen}>
+  <div class="xDiv">
+    <button class="xButton" on:click={onClose}>{"×"}</button>
+  </div>
+
+  <Spacer space={30} />
+
   <Container>
     <div class="container">
       <div>{"Risk:"}</div>
@@ -69,6 +75,20 @@
 </Modal>
 
 <style>
+  .xDiv {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .xButton {
+    background-color: transparent;
+    border: 0px;
+    font-size: 50px;
+    line-height: 15px;
+    transform: translateX(15px);
+    cursor: pointer;
+  }
+
   .container {
     display: flex;
     flex-direction: row;
@@ -77,24 +97,24 @@
     justify-content: center;
     /* max-width: 500px; */
   }
+
   .risk {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 40px;
-    /* width: 145px; */
-
-    /* background-color: blue; */
   }
+
   .bottom {
     display: flex;
     flex-direction: row;
     justify-content: center;
   }
+
   .button {
     width: 170px;
-    /* background-color: blue; */
   }
+
   input[type="text"] {
     text-align: center;
     max-width: 70px;
