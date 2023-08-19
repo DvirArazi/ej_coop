@@ -14,8 +14,8 @@ export function handleSocket(
   // checkId
   //=========
   socket.on("checkId", (id, callback) => {
-    let user: User | undefined;
-    if (id == undefined || (user = game.findUserById(id)) == undefined) {
+    let user: User | null;
+    if (id == null || (user = game.findUserById(id)) == null) {
       user = game.addUser(socket.id);
     }
     else {
@@ -40,7 +40,7 @@ export function handleSocket(
   //============
   socket.on("updateName", name => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == undefined) return;
+    if (user == null) return;
 
     game.updateUserName(user, name);
   });
@@ -50,7 +50,7 @@ export function handleSocket(
   //============
   socket.on("createRoom", callback => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == undefined) return;
+    if (user == null) return;
 
     const roomcode = game.createRoom(user);
 
@@ -61,11 +61,11 @@ export function handleSocket(
   // enterRoom
   //===========
   socket.on("enterRoom", (roomcode, callback) => {
-    function inner(): GameData | undefined {
+    function inner(): GameData | null {
       const user = game.findUserBySocketId(socket.id);
-      if (user == undefined) return undefined;
+      if (user == null) return null;
       const room = game.findRoomByRoomcode(roomcode);
-      if (room == undefined) return undefined;
+      if (room == null) return null;
 
       let isStt = room.stt === user;
 
@@ -106,7 +106,7 @@ export function handleSocket(
   // doesRoomExist
   //===============
   socket.on("doesRoomExist", (roomcode, callback) => {
-    callback(game.findRoomByRoomcode(roomcode) !== undefined);
+    callback(game.findRoomByRoomcode(roomcode) !== null);
   });
 
   //=========
@@ -114,9 +114,9 @@ export function handleSocket(
   //=========
   socket.on("riskSet", (roomcode, risk) => {
     const user = game.findUserBySocketId(socket.id);
-    if (user == undefined) return;
+    if (user == null) return;
     const room = game.findRoomByRoomcode(roomcode);
-    if (room == undefined) return;
+    if (room == null) return;
     if (
       room.stt !== user ||
       room.phaseData.phase !== Phase.Start ||

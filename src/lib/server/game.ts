@@ -15,12 +15,14 @@ export class Game {
     this._io = io;
   }
 
-  findUserById(id: String): User | undefined {
-    return this._users.find(user => user.id === id);
+  findUserById(id: String): User | null {
+    const value = this._users.find(user => user.id === id);
+    return value !== undefined ? value : null;
   }
 
-  findUserBySocketId(socketId: String): User | undefined {
-    return this._users.find(user => user.socketId === socketId);
+  findUserBySocketId(socketId: String): User | null {
+    const value = this._users.find(user => user.socketId === socketId);
+    return value !== undefined ? value : null;
   }
 
   findRoomByRoomcode(roomcode: string) {
@@ -100,7 +102,7 @@ export class Game {
       timeLeft: VOTE_SECONDS,
       votesFor: [
         ...[true],
-        ...(new Array(room.pers.length - 1).fill(undefined))
+        ...(new Array(room.pers.length - 1).fill(null))
       ]
     }
 

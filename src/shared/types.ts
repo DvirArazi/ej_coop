@@ -35,7 +35,7 @@ export type PhaseData = {
 } | {
   phase: Phase.Vote,
   risk: number,
-  votesFor: (boolean | undefined)[],
+  votesFor: (boolean | null)[],
   timeLeft: number,
 } | {
   phase: Phase.Spin,

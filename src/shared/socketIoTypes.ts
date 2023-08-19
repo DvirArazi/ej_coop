@@ -8,12 +8,12 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   checkId: (
-    id: string | undefined,
-    callback: (idNew: string | undefined) => void
+    id: string | null,
+    callback: (idNew: string | null) => void
   ) => void;
   updateName: (name: string) => void;
   createRoom: (callback: (roomcode: string) => void) => void;
   doesRoomExist: (roomcode: string, callback: (roomExists: boolean) => void) => void;
-  enterRoom: (roomcode: string, callback: (gameData: GameData | undefined) => void) => void;
+  enterRoom: (roomcode: string, callback: (gameData: GameData | null) => void) => void;
   riskSet: (roomcode: string, risk: number) => void;
 }

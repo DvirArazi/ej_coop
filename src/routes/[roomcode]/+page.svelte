@@ -13,18 +13,24 @@
     let roomcodeUpper = roomcode.toUpperCase();
     if (roomcode !== roomcodeUpper) goto(`/${roomcodeUpper}`);
   }
-  let gameData: GameData | undefined = undefined;
+  let gameData: GameData | "loading" | null = "loading";
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
-    console.log("gameDataNew: ", gameDataNew);
-    if (gameDataNew == undefined)
-      throw error(404, `Room ${roomcode} could not be found.`);
+    // console.log("gameDataNew: ", gameDataNew);
+    // if (gameDataNew == null) {
+    //   console.log("throwing");
+    //   throw error(404, `Room ${roomcode} could not be found.`);
+    // }
 
     gameData = gameDataNew;
   });
+
+  $: if (gameData == null) {
+    throw error(404, `Room ${roomcode} could not be found.`);
+  }
 </script>
 
-{#if gameData == undefined}
+{#if gameData === "loading" || gameData == null}
   <p>{"Loading..."}</p>
 {:else if gameData.isStt}
   <Storyteller {roomcode} sttData={gameData.sttData} />

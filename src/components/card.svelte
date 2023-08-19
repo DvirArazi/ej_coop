@@ -2,7 +2,7 @@
   import Spacer from "/@src/components/spacer.svelte";
 
   export let name: String;
-  export let attemptsC: number | undefined = undefined;
+  export let attemptsC: number | null = null;
 </script>
 
 <div class="outer">
@@ -13,7 +13,7 @@
       <div class="unnamed">{"Unnamed"}</div>
     {/if}
   </div>
-  {#if attemptsC !== undefined}
+  {#if attemptsC !== null}
     <div class="attempts">
       <img src="svgs/stylus_note_FILL0_wght400_GRAD0_opsz48.svg" alt="write" />
       <Spacer space={8} />
