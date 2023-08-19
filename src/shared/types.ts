@@ -3,26 +3,26 @@ export type Association = {
   isStt: boolean
 }
 
+export type RoleData = {
+  roomcode: string,
+  persNames: string[],
+  attemptsLeft: number,
+  phaseData: PhaseData,
+}
+
+export type SttData = RoleData;
+
+export type PerData = RoleData & {
+  index: number,
+}
+
 export type GameData = {
   isStt: true,
   sttData: SttData,
 } | {
   isStt: false,
   perData: PerData,
-}
-
-export type SttData = {
-  persNames: string[],
-  attemptsLeft: number,
-  phaseData: PhaseData,
-}
-
-export type PerData = {
-  index: number,
-  persNames: string[],
-  attemptsLeft: number,
-  phaseData: PhaseData,
-}
+};
 
 export enum Phase {
   Start,

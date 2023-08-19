@@ -73,13 +73,14 @@ export function handleSocket(
         game.addPersonality(room, user);
       }
 
-      
+
       const persNames = room.pers.map(per => per.name);
 
       if (isStt) {
         return {
           isStt: true,
           sttData: {
+            roomcode: roomcode,
             persNames: persNames,
             attemptsLeft: room.attemptsLeft,
             phaseData: room.phaseData,
@@ -90,9 +91,10 @@ export function handleSocket(
           isStt: false,
           perData: {
             index: findIndexN(room.pers, per => per == user)!,
+            roomcode: roomcode,
             persNames: persNames,
             attemptsLeft: room.attemptsLeft,
-            phaseData: room.phaseData
+            phaseData: room.phaseData,
           }
         };
       }

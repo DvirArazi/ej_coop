@@ -127,12 +127,14 @@ export class Game {
     const persNames = room.pers.map(per => per.name);
 
     this._io.to(room.stt.socketId).emit("storytellerDataUpdated", {
+      roomcode: room.code,
       persNames: persNames,
       attemptsLeft: room.attemptsLeft,
       phaseData: room.phaseData,
     });
     room.pers.forEach((per, i)=>{
       this._io.to(per.socketId).emit("personalityDataUpdated", {
+        roomcode: room.code,
         index: i,
         persNames: persNames,
         attemptsLeft: room.attemptsLeft,
