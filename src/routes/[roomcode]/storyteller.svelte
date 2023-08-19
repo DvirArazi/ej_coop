@@ -9,6 +9,7 @@
 
   export let roomcode: string;
   export let sttData: SttData;
+  console.log(sttData);
 
   let isInitModalOpen = false;
 

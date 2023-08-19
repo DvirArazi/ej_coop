@@ -3,8 +3,7 @@
 
   let dialog: HTMLDialogElement;
 
-  $: if (dialog !== null) {
-    console.log("showModal", isOpen);
+  $: if (dialog !== undefined) {
     if (isOpen) {
       document.body.style.overflow = "hidden";
       dialog.classList.remove("closing");
