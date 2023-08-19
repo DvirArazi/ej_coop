@@ -15,6 +15,8 @@
   let isNameInputEmpty = false;
 
   SOCKET.on("personalityDataUpdated", (perDataNew) => {
+    if (perDataNew.roomcode != roomcode) return;
+    
     perData = perDataNew;
     name = perData.persNames[perData.index];
   });

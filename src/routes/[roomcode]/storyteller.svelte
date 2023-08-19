@@ -13,6 +13,8 @@
   let isInitModalOpen = false;
 
   SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
+    if (sttDataNew.roomcode != roomcode) return;
+
     console.log("sttData: ", sttData);
     sttData = sttDataNew;
   });

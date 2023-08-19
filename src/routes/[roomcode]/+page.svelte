@@ -16,19 +16,18 @@
   let gameData: GameData | undefined = undefined;
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
-    if (gameDataNew === undefined)
+    console.log("gameDataNew: ", gameDataNew);
+    if (gameDataNew == undefined)
       throw error(404, `Room ${roomcode} could not be found.`);
 
     gameData = gameDataNew;
   });
 </script>
 
-{#if gameData !== undefined}
-  {#if gameData.isStt}
-    <Storyteller {roomcode} sttData={gameData.sttData} />
-  {:else}
-    <Personality {roomcode} perData={gameData.perData} />
-  {/if}
-{:else}
+{#if gameData == undefined}
   <p>{"Loading..."}</p>
+{:else if gameData.isStt}
+  <Storyteller {roomcode} sttData={gameData.sttData} />
+{:else}
+  <Personality {roomcode} perData={gameData.perData} />
 {/if}

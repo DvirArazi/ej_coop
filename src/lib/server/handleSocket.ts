@@ -15,7 +15,7 @@ export function handleSocket(
   //=========
   socket.on("checkId", (id, callback) => {
     let user: User | undefined;
-    if (id === undefined || (user = game.findUserById(id)) === undefined) {
+    if (id == undefined || (user = game.findUserById(id)) == undefined) {
       user = game.addUser(socket.id);
     }
     else {
@@ -40,7 +40,7 @@ export function handleSocket(
   //============
   socket.on("updateName", name => {
     const user = game.findUserBySocketId(socket.id);
-    if (user === undefined) return;
+    if (user == undefined) return;
 
     game.updateUserName(user, name);
   });
@@ -50,7 +50,7 @@ export function handleSocket(
   //============
   socket.on("createRoom", callback => {
     const user = game.findUserBySocketId(socket.id);
-    if (user === undefined) return;
+    if (user == undefined) return;
 
     const roomcode = game.createRoom(user);
 
@@ -63,16 +63,15 @@ export function handleSocket(
   socket.on("enterRoom", (roomcode, callback) => {
     function inner(): GameData | undefined {
       const user = game.findUserBySocketId(socket.id);
-      if (user === undefined) return undefined;
+      if (user == undefined) return undefined;
       const room = game.findRoomByRoomcode(roomcode);
-      if (room === undefined) return undefined;
+      if (room == undefined) return undefined;
 
       let isStt = room.stt === user;
 
       if (!isStt && !room.pers.includes(user)) {
         game.addPersonality(room, user);
       }
-
 
       const persNames = room.pers.map(per => per.name);
 
@@ -115,9 +114,9 @@ export function handleSocket(
   //=========
   socket.on("riskSet", (roomcode, risk) => {
     const user = game.findUserBySocketId(socket.id);
-    if (user === undefined) return;
+    if (user == undefined) return;
     const room = game.findRoomByRoomcode(roomcode);
-    if (room === undefined) return;
+    if (room == undefined) return;
     if (
       room.stt !== user ||
       room.phaseData.phase !== Phase.Start ||
