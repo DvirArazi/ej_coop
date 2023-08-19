@@ -20,9 +20,6 @@
     if (sttDataNew.roomcode != roomcode) return;
 
     sttData = sttDataNew;
-
-    if (sttData.phaseData.phase == Phase.Vote) {
-    }
   });
 
   function onShareClick() {
@@ -64,15 +61,15 @@
 
 <Spacer space={30} />
 
+{#if isInitModalOpen}
 <InitModal
-  isOpen={isInitModalOpen}
   onRiskNumSet={handleRiskSet}
   onClose={() => (isInitModalOpen = false)}
 />
+{/if}
 
 {#if sttData.phaseData.phase == Phase.Vote}
   <WheelModal
-    isOpen={true}
     persNames={sttData.persNames}
     risk={sttData.phaseData.risk}
     spinRole={SpinRole.Stt}

@@ -5,7 +5,6 @@
   import Spacer from "/@src/components/spacer.svelte";
   import { DIE_RESOLUTION } from "/@src/shared/constants";
 
-  export let isOpen: boolean;
   export let onRiskNumSet: (riskNum: number) => void;
   export let onClose: () => void;
 
@@ -28,7 +27,7 @@
   }
 </script>
 
-<Modal {isOpen}>
+<Modal>
   <div class="xDiv">
     <button class="xButton" on:click={onClose}>{"×"}</button>
   </div>

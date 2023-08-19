@@ -1,38 +1,23 @@
 <script lang="ts">
-  export let isOpen: boolean;
+  import { onDestroy, onMount } from "svelte";
 
   let dialog: HTMLDialogElement;
 
-  $: if (dialog !== undefined) {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      dialog.classList.remove("closing");
-      dialog.showModal();
-    } else {
-      dialog.classList.add("closing");
-      // setTimeout(() => {
-      document.body.style.overflow = "auto";
-      dialog.classList.remove("closing");
-      dialog.close();
-      // }, 300); // Adjust this time to match your closing animation duration
-    }
-  }
+  onMount(() => {
+    document.body.style.overflow = "hidden";
+    dialog.showModal();
+  });
+
+  onDestroy(() => {
+    document.body.style.overflow = "auto";
+    dialog.close();
+  });
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-
-<dialog
-  bind:this={dialog}
-  on:close={() => {
-    isOpen = false;
-  }}
->
+<dialog bind:this={dialog}>
   <div class="outer">
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div on:click|stopPropagation>
+    <div>
       <slot />
-      <!-- svelte-ignore a11y-autofocus -->
-      <!-- <button autofocus on:click={() => dialog.close()}>close modal</button> -->
     </div>
   </div>
 </dialog>
