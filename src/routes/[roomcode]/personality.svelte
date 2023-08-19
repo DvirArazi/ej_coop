@@ -8,7 +8,6 @@
   export let roomcode: string;
   export let perData: PerData;
 
-  
   let cheat: HTMLDivElement;
   let nameInputWidth: number;
   let name: string;
@@ -16,7 +15,7 @@
 
   SOCKET.on("personalityDataUpdated", (perDataNew) => {
     if (perDataNew.roomcode != roomcode) return;
-    
+
     perData = perDataNew;
     name = perData.persNames[perData.index];
   });
@@ -59,10 +58,7 @@
 
 <Spacer space={60} />
 
-<PerList
-  personalitiesNames={perData.persNames}
-  attemptsLeft={perData.attemptsLeft}
-/>
+<PerList persNames={perData.persNames} attemptsLeft={perData.attemptsLeft} />
 
 <div
   contenteditable="true"

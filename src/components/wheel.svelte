@@ -3,7 +3,7 @@
   import { DIE_RESOLUTION } from "/@src/shared/constants";
 
   export let persNames: string[];
-  export let failRatio: number;
+  export let risk: number;
   export let tiltAngle: number;
 
   const w = 500;
@@ -20,14 +20,14 @@
     skull.onload = () => {
       wCtx = wheelCanvas.getContext("2d")!;
 
-      const alpha = (2 * Math.PI * (1 - failRatio) * 0.5) / persNames.length;
+      const alpha = (2 * Math.PI * (1 - risk) * 0.5) / persNames.length;
       for (let i = 0; i < persNames.length; i++) {
         drawDoubleSlice(1.5 * Math.PI, alpha, "#b3ecff", "#66d9ff", i);
         drawName(i, alpha);
       }
 
       const beta = Math.PI / DIE_RESOLUTION;
-      for (let i = 0; i < failRatio * DIE_RESOLUTION; i++) {
+      for (let i = 0; i < risk * DIE_RESOLUTION; i++) {
         drawDoubleSlice(1.5 * Math.PI, -beta, "#ff0000", "#ff4d4d", i);
         drawSkull(i, beta);
       }

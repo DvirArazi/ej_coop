@@ -2,22 +2,27 @@
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
+  import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
+  import { SpinRole } from "/@src/lib/client/types";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
   import { DIE_RESOLUTION } from "/@src/shared/constants";
-  import type { SttData } from "/@src/shared/types";
+  import { Phase, type SttData } from "/@src/shared/types";
 
   export let roomcode: string;
   export let sttData: SttData;
   console.log(sttData);
 
   let isInitModalOpen = false;
+  let is;
 
   SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
     if (sttDataNew.roomcode != roomcode) return;
 
-    console.log("sttData: ", sttData);
     sttData = sttDataNew;
+
+    if (sttData.phaseData.phase == Phase.Vote) {
+    }
   });
 
   function onShareClick() {
@@ -28,6 +33,7 @@
 
   function handleRiskSet(riskNum: number) {
     SOCKET.emit("riskSet", roomcode, riskNum / DIE_RESOLUTION);
+    isInitModalOpen = false;
   }
 </script>
 
@@ -44,10 +50,7 @@
 <Spacer space={30} />
 
 {#if sttData.persNames.length > 0}
-  <PerList
-    personalitiesNames={sttData.persNames}
-    attemptsLeft={sttData.attemptsLeft}
-  />
+  <PerList persNames={sttData.persNames} attemptsLeft={sttData.attemptsLeft} />
 
   <Spacer space={30} />
 
@@ -64,8 +67,18 @@
 <InitModal
   isOpen={isInitModalOpen}
   onRiskNumSet={handleRiskSet}
-  onClose={() => isInitModalOpen = false}
+  onClose={() => (isInitModalOpen = false)}
 />
+
+{#if sttData.phaseData.phase == Phase.Vote}
+  <WheelModal
+    isOpen={true}
+    persNames={sttData.persNames}
+    risk={sttData.phaseData.risk}
+    spinRole={SpinRole.Stt}
+    secondsToVote={sttData.phaseData.secondsToVote}
+  />
+{/if}
 
 <style>
   .title {

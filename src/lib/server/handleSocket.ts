@@ -123,7 +123,7 @@ export function handleSocket(
       risk < 0 || risk > 1
     ) return;
 
-
+    game.setVotePhase(room, risk);
   });
 
   //============

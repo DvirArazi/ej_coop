@@ -100,7 +100,7 @@ export class Game {
     room.phaseData = {
       phase: Phase.Vote,
       risk: risk,
-      timeLeft: VOTE_SECONDS,
+      secondsToVote: VOTE_SECONDS,
       votesFor: [
         ...[true],
         ...(new Array(room.pers.length - 1).fill(null))
@@ -135,7 +135,7 @@ export class Game {
       attemptsLeft: room.attemptsLeft,
       phaseData: room.phaseData,
     });
-    room.pers.forEach((per, i)=>{
+    room.pers.forEach((per, i) => {
       this._io.to(per.socketId).emit("personalityDataUpdated", {
         roomcode: room.code,
         index: i,

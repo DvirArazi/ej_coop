@@ -3,21 +3,21 @@
   import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
 
-  export let personalitiesNames: string[];
+  export let persNames: string[];
   export let attemptsLeft: number;
 </script>
 
 <Container>
-    <Card name={personalitiesNames[0]} attemptsC={attemptsLeft} />
+  <Card name={persNames[0]} attemptsC={attemptsLeft} />
 
-    {#if personalitiesNames.length > 1}
+  {#if persNames.length > 1}
+    <Spacer space={20} />
+    <div class="line" />
+    {#each persNames.slice(1) as name, _}
       <Spacer space={20} />
-      <div class="line" />
-      {#each personalitiesNames.slice(1) as name, _}
-        <Spacer space={20} />
-        <Card {name} />
-      {/each}
-    {/if}
+      <Card {name} />
+    {/each}
+  {/if}
 </Container>
 
 <style>
