@@ -158,6 +158,18 @@ export function handleSocket(
   });
 
   //============
+  // cancelSpin
+  //============
+  socket.on("cancelSpin", (roomcode) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.cancelSpin(room, user);
+  });
+
+  //============
   // disconnect
   //============
   socket.on("disconnect", () => {

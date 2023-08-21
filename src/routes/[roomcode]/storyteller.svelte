@@ -1,13 +1,12 @@
 <script lang="ts">
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
-    import InstantModal from "/@src/components/instantModal.svelte";
+  import InstantModal from "/@src/components/instantModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
   import { SpinRole } from "/@src/lib/client/types";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
-  import { DIE_RESOLUTION } from "/@src/shared/constants";
   import { Phase, type SttData } from "/@src/shared/types";
 
   export let roomcode: string;
@@ -33,7 +32,11 @@
   }
 
   function handleContinue() {
-    SOCKET.emit("continue", roomcode)
+    SOCKET.emit("continue", roomcode);
+  }
+
+  function handleCancelSpin() {
+    SOCKET.emit("cancelSpin", roomcode);
   }
 </script>
 
@@ -73,20 +76,21 @@
 
 {#if sttData.phaseData.phase == Phase.Vote}
   {#if typeof sttData.phaseData.risk !== "boolean"}
-  <WheelModal
-    persNames={sttData.persNames}
-    votes={sttData.phaseData.votes}
-    risk={sttData.phaseData.risk}
-    spinRole={SpinRole.Stt}
-    secondsToVote={sttData.phaseData.secondsToVote}
-    revolutionsC={sttData.phaseData.revolutionsC}
-    onContinue={handleContinue}
-  />
+    <WheelModal
+      persNames={sttData.persNames}
+      votes={sttData.phaseData.votes}
+      risk={sttData.phaseData.risk}
+      spinRole={SpinRole.Stt}
+      secondsToVote={sttData.phaseData.secondsToVote}
+      revolutionsC={sttData.phaseData.revolutionsC}
+      onContinue={handleContinue}
+      onClose={handleCancelSpin}
+    />
   {:else}
-  <InstantModal
-    isSuccess={sttData.phaseData.risk}
-    onContinue={handleContinue}
-  />
+    <InstantModal
+      isSuccess={sttData.phaseData.risk}
+      onContinue={handleContinue}
+    />
   {/if}
 {/if}
 

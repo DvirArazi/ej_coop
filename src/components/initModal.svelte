@@ -8,7 +8,7 @@
   export let onRiskNumSet: (risk: number | boolean) => void;
   export let onClose: () => void;
 
-  let riskNum: number = 0;
+  let riskNum: number | null = 0;
 
   function handleRiskInput(event: Event) {
     const max = DIE_RESOLUTION - 1;
@@ -16,7 +16,7 @@
     let target = event.target as HTMLInputElement;
     const valueNum = Number.parseInt(target.value);
     if (isNaN(valueNum)) {
-      riskNum = 0;
+      riskNum = null;
       target.value = "";
       return;
     } else if (valueNum < 0) riskNum = 0;
@@ -53,8 +53,10 @@
     <Spacer space={40} />
 
     <Button
-      onClick={() => onRiskNumSet(riskNum / DIE_RESOLUTION)}
-      isEnabled={riskNum !== 0}
+      onClick={() => {
+        if (riskNum !== null) onRiskNumSet(riskNum / DIE_RESOLUTION);
+      }}
+      isEnabled={riskNum !== null}
     >
       {"Continue"}
     </Button>

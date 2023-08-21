@@ -18,6 +18,7 @@
   export let onVote: (vote: boolean) => void = () => {};
   export let onSpin: () => void = () => {};
   export let onContinue: () => void = () => {};
+  export let onClose: () => void = () => {};
 
   let tiltAngle = 0;
   let isSuccess: boolean | null = null;
@@ -52,6 +53,12 @@
 </script>
 
 <Modal>
+  {#if spinRole === SpinRole.Stt}
+    <div class="xDiv">
+      <button class="xButton" on:click={onClose}>{"×"}</button>
+    </div>
+  {/if}
+
   {#if isSuccess != null}
     <div class="conclusion1">
       <div
@@ -68,7 +75,9 @@
   <Spacer space={30} />
 
   {#if spinRole === SpinRole.Stt}
-    <Button isEnabled={revolutionsC > 0 && isSuccess != null} onClick={onContinue}
+    <Button
+      isEnabled={revolutionsC > 0 && isSuccess != null}
+      onClick={onContinue}
       >{"Continue"}
     </Button>
   {:else if spinRole === SpinRole.Prom}
@@ -78,10 +87,18 @@
   {:else}
     <div class="vote">
       <Button isEnabled={ableToVote} onClick={() => onVote(true)}>
-        <img src={ableToVote ? "svgs/thumb_up.svg" : "svgs/thumb_up_disabled.svg"} alt="write" />
+        <img
+          src={ableToVote ? "svgs/thumb_up.svg" : "svgs/thumb_up_disabled.svg"}
+          alt="write"
+        />
       </Button>
       <Button isEnabled={ableToVote} onClick={() => onVote(false)}>
-        <img src={ableToVote ? "svgs/thumb_down.svg" : "svgs/thumb_down_disabled.svg"} alt="write" />
+        <img
+          src={ableToVote
+            ? "svgs/thumb_down.svg"
+            : "svgs/thumb_down_disabled.svg"}
+          alt="write"
+        />
       </Button>
     </div>
   {/if}
@@ -94,6 +111,20 @@
 </Modal>
 
 <style>
+  .xDiv {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .xButton {
+    background-color: transparent;
+    border: 0px;
+    font-size: 50px;
+    line-height: 15px;
+    transform: translateX(15px);
+    cursor: pointer;
+  }
+
   .vote {
     display: flex;
     flex-direction: row;

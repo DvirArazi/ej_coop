@@ -168,6 +168,17 @@ export class Game {
     this.emitGameDataUpdated(room);
   }
 
+  cancelSpin(room: Room, user: User) {
+    if (
+      room.stt !== user ||
+      room.phaseData.phase !== Phase.Vote
+    ) return;
+
+    room.phaseData = { phase: Phase.Start };
+
+    this.emitGameDataUpdated(room);
+  }
+
   private generateRoomcode(): string {
     const aCode = "A".charCodeAt(0);
     const zCode = "Z".charCodeAt(0);

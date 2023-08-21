@@ -19,4 +19,5 @@ export interface ClientToServerEvents {
   vote: (roomcode: string, vote: boolean) => void;
   spin: (roomcode: string) => void;
   continue: (roomcode: string) => void;
+  cancelSpin: (roomcode: string) => void;
 }
