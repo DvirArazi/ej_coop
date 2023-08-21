@@ -2,8 +2,8 @@ import type { Socket } from "socket.io";
 import type { Game } from "/@src/lib/server/game";
 import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/socketIoTypes";
 import type { User } from "/@src/lib/server/types";
-import { Phase, type GameData } from "/@src/shared/types";
 import { findIndexN } from "/@src/shared/funcs";
+import type { GameData } from "/@src/shared/types";
 
 export function handleSocket(
   socket: Socket<ClientToServerEvents, ServerToClientEvents>,
@@ -117,13 +117,8 @@ export function handleSocket(
     if (user === null) return;
     const room = game.findRoomByRoomcode(roomcode);
     if (room === null) return;
-    if (
-      room.stt !== user ||
-      room.phaseData.phase !== Phase.Start ||
-      risk < 0 || risk > 1
-    ) return;
 
-    game.setVotePhase(room, risk);
+    game.setVotePhase(room, user, risk);
   });
 
   //======

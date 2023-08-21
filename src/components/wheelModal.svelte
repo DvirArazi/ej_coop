@@ -81,8 +81,7 @@
         <img src={ableToVote ? "svgs/thumb_up.svg" : "svgs/thumb_up_disabled.svg"} alt="write" />
       </Button>
       <Button isEnabled={ableToVote} onClick={() => onVote(false)}>
-        {ableToVote}
-        <!-- <img src={ableToVote ? "svgs/thumb_down.svg" : "svgs/thumb_down_disabled.svg"} alt="write" /> -->
+        <img src={ableToVote ? "svgs/thumb_down.svg" : "svgs/thumb_down_disabled.svg"} alt="write" />
       </Button>
     </div>
   {/if}

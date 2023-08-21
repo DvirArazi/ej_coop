@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
+    import InstantModal from "/@src/components/instantModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";

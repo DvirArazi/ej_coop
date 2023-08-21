@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
+    import InstantModal from "/@src/components/instantModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
@@ -26,8 +27,8 @@
     });
   }
 
-  function handleRiskSet(riskNum: number) {
-    SOCKET.emit("riskSet", roomcode, riskNum / DIE_RESOLUTION);
+  function handleRiskSet(risk: number | boolean) {
+    SOCKET.emit("riskSet", roomcode, risk);
     isInitModalOpen = false;
   }
 
@@ -71,6 +72,7 @@
 {/if}
 
 {#if sttData.phaseData.phase == Phase.Vote}
+  {#if typeof sttData.phaseData.risk !== "boolean"}
   <WheelModal
     persNames={sttData.persNames}
     votes={sttData.phaseData.votes}
@@ -80,6 +82,12 @@
     revolutionsC={sttData.phaseData.revolutionsC}
     onContinue={handleContinue}
   />
+  {:else}
+  <InstantModal
+    isSuccess={sttData.phaseData.risk}
+    onContinue={handleContinue}
+  />
+  {/if}
 {/if}
 
 <style>

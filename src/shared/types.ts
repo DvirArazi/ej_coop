@@ -33,7 +33,7 @@ export type PhaseData = {
   phase: Phase.Start,
 } | {
   phase: Phase.Vote,
-  risk: number,
+  risk: number | boolean,
   votes: (boolean | null)[],
   secondsToVote: number,
   revolutionsC: number,

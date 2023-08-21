@@ -1,3 +1,5 @@
+[ ] add a cancel (X) button
+[ ] test if the wheel will roll more smoothly without the updates every second
 [V] fix canvas not re-rendering
 [V] fix name not reloading in the main screen
 [V] make voters unable to vote after voting is over
@@ -5,8 +7,8 @@
 [V] make for & against buttons grey after press
 [V] fix bug where the name disappers on reload
 [V] make sure the canvas is recolored on reload
-[ ] fix instant buttons alignment
-[ ] make instant buttons work
+[V] fix instant buttons alignment
+[V] make instant buttons work
 [V] make the timer disapper on 0
 [ ] make associations menu
 [V] disable svg dragging

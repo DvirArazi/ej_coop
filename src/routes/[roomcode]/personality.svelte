@@ -6,6 +6,7 @@
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SpinRole } from "/@src/lib/client/types";
+  import InstantModal from "/@src/components/instantModal.svelte";
 
   export let roomcode: string;
   export let perData: PerData;
@@ -62,16 +63,20 @@
 </script>
 
 {#if perData.phaseData.phase == Phase.Vote}
-  <WheelModal
-    persNames={perData.persNames}
-    votes={perData.phaseData.votes}
-    risk={perData.phaseData.risk}
-    spinRole={perData.index === 0 ? SpinRole.Prom : SpinRole.Voter}
-    secondsToVote={perData.phaseData.secondsToVote}
-    revolutionsC={perData.phaseData.revolutionsC}
-    onVote={handleVote}
-    onSpin={handleSpin}
-  />
+  {#if typeof perData.phaseData.risk !== "boolean"}
+    <WheelModal
+      persNames={perData.persNames}
+      votes={perData.phaseData.votes}
+      risk={perData.phaseData.risk}
+      spinRole={perData.index === 0 ? SpinRole.Prom : SpinRole.Voter}
+      secondsToVote={perData.phaseData.secondsToVote}
+      revolutionsC={perData.phaseData.revolutionsC}
+      onVote={handleVote}
+      onSpin={handleSpin}
+    />
+  {:else}
+    <InstantModal isSuccess={perData.phaseData.risk} />
+  {/if}
 {/if}
 
 <div class="title">{`Room: ${roomcode}`}</div>

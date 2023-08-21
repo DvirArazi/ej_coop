@@ -75,7 +75,13 @@ export class Game {
     this.emitGameDataUpdated(room);
   }
 
-  setVotePhase(room: Room, risk: number): void {
+  setVotePhase(room: Room, user: User, risk: number | boolean): void {
+    if (
+      room.stt !== user ||
+      room.phaseData.phase !== Phase.Start ||
+      (typeof risk !== "boolean" && (risk < 0 || risk > 1))
+    ) return;
+
     room.phaseData = {
       phase: Phase.Vote,
       risk: risk,
@@ -87,20 +93,22 @@ export class Game {
       revolutionsC: 0,
     }
 
-    const intervalId = setInterval(() => {
-      if (
-        room.phaseData.phase !== Phase.Vote ||
-        room.phaseData.secondsToVote <= 0 ||
-        room.phaseData.revolutionsC > 0
-      ) {
-        clearInterval(intervalId);
-        return;
-      }
+    if (typeof risk !== "boolean") {
+      const intervalId = setInterval(() => {
+        if (
+          room.phaseData.phase !== Phase.Vote ||
+          room.phaseData.secondsToVote <= 0 ||
+          room.phaseData.revolutionsC > 0
+        ) {
+          clearInterval(intervalId);
+          return;
+        }
 
-      room.phaseData.secondsToVote -= 1;
+        room.phaseData.secondsToVote -= 1;
 
-      this.emitGameDataUpdated(room);
-    }, 1000);
+        this.emitGameDataUpdated(room);
+      }, 1000);
+    }
 
     this.emitGameDataUpdated(room);
   }
@@ -140,11 +148,14 @@ export class Game {
       room.phaseData.phase != Phase.Vote
     ) return;
 
-    const isSuccess = getIsSuccess(
-      room.phaseData.revolutionsC,
-      room.phaseData.risk,
-      room.phaseData.votes,
-    );
+    const isSuccess =
+      typeof room.phaseData.risk === "boolean" ?
+        room.phaseData.risk :
+        getIsSuccess(
+          room.phaseData.revolutionsC,
+          room.phaseData.risk,
+          room.phaseData.votes,
+        );
 
     if (isSuccess && room.attemptsLeft > 1) room.attemptsLeft -= 1;
     else {

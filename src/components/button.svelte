@@ -31,7 +31,7 @@
     on:touchstart={() => {
       if (isEnabled) isDown = true;
     }}
-    on:touchend={() => {
+    on:touchend|self={() => {
       if (isEnabled) onClick();
     }}
     disabled={!isEnabled}

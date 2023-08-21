@@ -5,7 +5,7 @@
   import Spacer from "/@src/components/spacer.svelte";
   import { DIE_RESOLUTION } from "/@src/shared/constants";
 
-  export let onRiskNumSet: (riskNum: number) => void;
+  export let onRiskNumSet: (risk: number | boolean) => void;
   export let onClose: () => void;
 
   let riskNum: number = 0;
@@ -19,7 +19,7 @@
       riskNum = 0;
       target.value = "";
       return;
-    } else if (valueNum < 1) riskNum = 1;
+    } else if (valueNum < 0) riskNum = 0;
     else if (valueNum > max) riskNum = max;
     else riskNum = Math.floor(valueNum);
 
@@ -43,7 +43,7 @@
       <div class="risk">
         <input
           type="text"
-          placeholder={`1-${DIE_RESOLUTION - 1}`}
+          placeholder={`0-${DIE_RESOLUTION - 1}`}
           on:input={handleRiskInput}
         />
         {DIE_RESOLUTION}
@@ -52,7 +52,10 @@
 
     <Spacer space={40} />
 
-    <Button onClick={() => onRiskNumSet(riskNum)} isEnabled={riskNum !== 0}>
+    <Button
+      onClick={() => onRiskNumSet(riskNum / DIE_RESOLUTION)}
+      isEnabled={riskNum !== 0}
+    >
       {"Continue"}
     </Button>
     <Spacer space={20} />
@@ -60,17 +63,11 @@
 
   <Spacer space={40} />
 
-  <div class="bottom">
-    <div class="button">
-      <Button onClick={() => onRiskNumSet(10)}>{"Instant Success"}</Button>
-    </div>
+  <Button onClick={() => onRiskNumSet(true)}>{"Instant Success"}</Button>
 
-    <Spacer space={30} />
+  <Spacer space={30} />
 
-    <div class="button">
-      <Button onClick={() => onRiskNumSet(0)}>{"Instant Failure"}</Button>
-    </div>
-  </div>
+  <Button onClick={() => onRiskNumSet(false)}>{"Instant Failure"}</Button>
 </Modal>
 
 <style>
@@ -102,16 +99,6 @@
     flex-direction: column;
     align-items: center;
     font-size: 40px;
-  }
-
-  .bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .button {
-    width: 170px;
   }
 
   input[type="text"] {
