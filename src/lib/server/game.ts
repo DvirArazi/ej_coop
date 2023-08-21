@@ -5,6 +5,7 @@ import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/so
 import { Phase, type GameData } from "/@src/shared/types";
 import { v4 as uuidv4 } from 'uuid';
 import { DIE_RESOLUTION, VOTE_SECONDS } from "/@src/shared/constants";
+import { findIndexN, genRand, getIsSuccess } from "/@src/shared/funcs";
 
 export class Game {
   private _io: Server<ClientToServerEvents, ServerToClientEvents>;
@@ -74,38 +75,81 @@ export class Game {
     this.emitGameDataUpdated(room);
   }
 
-  // getGameData(room: Room, user: User): GameData {
-  //   const personalitiesNames = room.personalities.map(per => per.name);
-
-  //   return room.storyteller === user ?
-  //     {
-  //       isStoryteller: true,
-  //       storytellerData: {
-  //         persNames: personalitiesNames,
-  //         attemptsLeft: room.attemptsLeft,
-  //         phaseData: room.phaseData,
-  //       }
-  //     } :
-  //     {
-  //       isStoryteller: false,
-  //       personalityData: {
-  //         index: user.name,
-  //         personalitiesNames: personalitiesNames,
-  //         attemptsLeft: room.attemptsLeft,
-  //       }
-  //     }
-  // }
-
   setVotePhase(room: Room, risk: number): void {
     room.phaseData = {
       phase: Phase.Vote,
       risk: risk,
       secondsToVote: VOTE_SECONDS,
-      votesFor: [
+      votes: [
         ...[true],
         ...(new Array(room.pers.length - 1).fill(null))
-      ]
+      ],
+      revolutionsC: 0,
     }
+
+    const intervalId = setInterval(() => {
+      if (
+        room.phaseData.phase !== Phase.Vote ||
+        room.phaseData.secondsToVote <= 0 ||
+        room.phaseData.revolutionsC > 0
+      ) {
+        clearInterval(intervalId);
+        return;
+      }
+
+      room.phaseData.secondsToVote -= 1;
+
+      this.emitGameDataUpdated(room);
+    }, 1000);
+
+    this.emitGameDataUpdated(room);
+  }
+
+  vote(room: Room, user: User, vote: boolean): void {
+    if (room.phaseData.phase != Phase.Vote) return;
+    const userI = findIndexN(room.pers, per => per === user);
+    if (userI === null) return;
+
+    room.phaseData.votes[userI] = vote;
+
+    if (!room.phaseData.votes.includes(null)) {
+      room.phaseData.secondsToVote = 0;
+    }
+
+    this.emitGameDataUpdated(room);
+  }
+
+  spin(room: Room, user: User) {
+    if (
+      room.phaseData.phase !== Phase.Vote ||
+      room.phaseData.secondsToVote > 0 ||
+      room.pers[0] !== user
+    ) return;
+
+    room.phaseData.revolutionsC = genRand(5, 15);
+
+    this.emitGameDataUpdated(room);
+  }
+
+  continueGame(room: Room, user: User) {
+    if (
+      room.stt !== user ||
+      room.phaseData.phase != Phase.Vote
+    ) return;
+
+    const isSuccess = getIsSuccess(
+      room.phaseData.revolutionsC,
+      room.phaseData.risk,
+      room.phaseData.votes,
+    );
+
+    if (isSuccess && room.attemptsLeft > 1) room.attemptsLeft -= 1;
+    else {
+      room.pers.unshift(room.pers.pop()!);
+      room.attemptsLeft = 3;
+    }
+
+    room.phaseData = { phase: Phase.Start };
 
     this.emitGameDataUpdated(room);
   }

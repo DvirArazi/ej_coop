@@ -6,6 +6,9 @@ input[type="text"] {
   font-family: 'Rubik';
   font-size: 30px;
   font-weight: 900;
+
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
 }
 
 body {

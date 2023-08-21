@@ -37,7 +37,7 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.15);
-    max-width: 500px;
+    max-width: 400px;
     text-align: center;
     margin: auto;
     user-select: none;

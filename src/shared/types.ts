@@ -27,7 +27,6 @@ export type GameData = {
 export enum Phase {
   Start,
   Vote,
-  Spin,
 }
 
 export type PhaseData = {
@@ -35,9 +34,7 @@ export type PhaseData = {
 } | {
   phase: Phase.Vote,
   risk: number,
-  votesFor: (boolean | null)[],
+  votes: (boolean | null)[],
   secondsToVote: number,
-} | {
-  phase: Phase.Spin,
-  velocity: number,
+  revolutionsC: number,
 }

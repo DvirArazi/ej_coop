@@ -126,6 +126,42 @@ export function handleSocket(
     game.setVotePhase(room, risk);
   });
 
+  //======
+  // vote
+  //======
+  socket.on("vote", (roomcode, vote) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.vote(room, user, vote);
+  });
+
+  //======
+  // spin
+  //======
+  socket.on("spin", (roomcode) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.spin(room, user);
+  });
+
+  //==========
+  // continue
+  //==========
+  socket.on("continue", (roomcode) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.continueGame(room, user);
+  });
+
   //============
   // disconnect
   //============

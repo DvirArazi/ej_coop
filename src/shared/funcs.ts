@@ -14,3 +14,20 @@ export function findIndexN<T>(
 
   return index != -1 ? index : null;
 }
+
+export function genRand(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
+
+export function getIsSuccess(
+  revolutionsC: number,
+  risk: number,
+  votes: (boolean | null)[],
+): boolean {
+  const pos = revolutionsC % 1;
+
+  return pos < risk
+    ? false
+    : votes[Math.floor(((1 - pos) * votes.length) / (1 - risk))] ??
+    true;
+}

@@ -3,6 +3,7 @@
   import { DIE_RESOLUTION } from "/@src/shared/constants";
 
   export let persNames: string[];
+  export let votes: (boolean | null)[];
   export let risk: number;
   export let tiltAngle: number;
 
@@ -16,38 +17,54 @@
   let pointerCanvas: HTMLCanvasElement;
   let pCtx: CanvasRenderingContext2D;
 
-  onMount(() => {
-    skull.onload = () => {
-      wCtx = wheelCanvas.getContext("2d")!;
 
-      const alpha = (2 * Math.PI * (1 - risk) * 0.5) / persNames.length;
-      for (let i = 0; i < persNames.length; i++) {
-        drawDoubleSlice(1.5 * Math.PI, alpha, "#b3ecff", "#66d9ff", i);
-        drawName(i, alpha);
-      }
+  $: if (
+    persNames !== undefined &&
+    votes !== undefined &&
+    risk !== undefined &&
+    tiltAngle !== undefined
+  ) {
+    if (skull.complete) draw();
+    else skull.onload = draw;
+  }
 
-      const beta = Math.PI / DIE_RESOLUTION;
-      for (let i = 0; i < risk * DIE_RESOLUTION; i++) {
-        drawDoubleSlice(1.5 * Math.PI, -beta, "#ff0000", "#ff4d4d", i);
-        drawSkull(i, beta);
-      }
+  function draw() {
+    wCtx = wheelCanvas.getContext("2d")!;
+    wCtx.clearRect(0, 0, w, h);
 
-      pCtx = pointerCanvas.getContext("2d")!;
+    const alpha = (2 * Math.PI * (1 - risk) * 0.5) / persNames.length;
+    for (let i = 0; i < persNames.length; i++) {
+      const [color0, color1] =
+        votes[i] == null
+          ? ["#b3ecff", "#66d9ff"]
+          : votes[i]
+          ? ["#99FF99", "#4DFF4D"]
+          : ["#ff4d4d", "#ff0000"];
+      drawDoubleSlice(1.5 * Math.PI, alpha, color0, color1, i);
+      drawName(i, alpha);
+    }
 
-      pCtx.fillStyle = "rgb(0, 255, 128)";
-      pCtx.beginPath();
-      pCtx.moveTo(0.5 * w, 0);
-      pCtx.lineTo(0.5 * w, 50);
-      pCtx.lineTo(0.5 * w - 20, 0);
-      pCtx.fill();
-      pCtx.fillStyle = "rgb(0, 230, 115)";
-      pCtx.beginPath();
-      pCtx.moveTo(0.5 * w, 0);
-      pCtx.lineTo(0.5 * w, 50);
-      pCtx.lineTo(0.5 * w + 20, 0);
-      pCtx.fill();
-    };
-  });
+    const beta = Math.PI / DIE_RESOLUTION;
+    for (let i = 0; i < risk * DIE_RESOLUTION; i++) {
+      drawDoubleSlice(1.5 * Math.PI, -beta, "#ff0000", "#ff4d4d", i);
+      drawSkull(i, beta);
+    }
+
+    pCtx = pointerCanvas.getContext("2d")!;
+
+    pCtx.fillStyle = "rgb(0, 255, 128)";
+    pCtx.beginPath();
+    pCtx.moveTo(0.5 * w, 0);
+    pCtx.lineTo(0.5 * w, 50);
+    pCtx.lineTo(0.5 * w - 20, 0);
+    pCtx.fill();
+    pCtx.fillStyle = "rgb(0, 230, 115)";
+    pCtx.beginPath();
+    pCtx.moveTo(0.5 * w, 0);
+    pCtx.lineTo(0.5 * w, 50);
+    pCtx.lineTo(0.5 * w + 20, 0);
+    pCtx.fill();
+  }
 
   function drawDoubleSlice(
     start: number,
@@ -62,7 +79,7 @@
 
       wCtx.fillStyle = color;
       wCtx.beginPath();
-      wCtx.arc(0.5 * w, 0.5 * h, 0.5 * w, from, to);
+      wCtx.arc(0.5 * w, 0.5 * h, 0.5 * w, from, to + 0.0);
       wCtx.lineTo(0.5 * w, 0.5 * h);
       wCtx.fill();
     }
@@ -121,7 +138,7 @@
     bind:this={wheelCanvas}
     width={w}
     height={h}
-    style={`transform: rotate(${tiltAngle}rad);`}
+    style={`transform: rotate(${tiltAngle}rad)`}
   />
 </div>
 

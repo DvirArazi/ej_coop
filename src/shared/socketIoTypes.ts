@@ -16,4 +16,7 @@ export interface ClientToServerEvents {
   doesRoomExist: (roomcode: string, callback: (roomExists: boolean) => void) => void;
   enterRoom: (roomcode: string, callback: (gameData: GameData | null) => void) => void;
   riskSet: (roomcode: string, risk: number) => void;
+  vote: (roomcode: string, vote: boolean) => void;
+  spin: (roomcode: string) => void;
+  continue: (roomcode: string) => void;
 }

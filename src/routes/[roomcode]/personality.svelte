@@ -2,11 +2,15 @@
   import { onMount } from "svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
-  import type { PerData } from "/@src/shared/types";
+  import { Phase, type PerData } from "/@src/shared/types";
   import PerList from "/@src/routes/[roomcode]/perList.svelte";
+  import WheelModal from "/@src/components/wheelModal.svelte";
+  import { SpinRole } from "/@src/lib/client/types";
 
   export let roomcode: string;
   export let perData: PerData;
+
+  console.log(perData);
 
   let cheat: HTMLDivElement;
   let nameInputWidth: number;
@@ -16,18 +20,34 @@
   SOCKET.on("personalityDataUpdated", (perDataNew) => {
     if (perDataNew.roomcode != roomcode) return;
 
+    console.log(perDataNew);
+
     perData = perDataNew;
     name = perData.persNames[perData.index];
   });
 
-  function handleNameInputChange() {
+  function handleNameInput(event: Event) {
+    // let target = event.target as HTMLInputElement;
+    // target.value = name;
     SOCKET.emit("updateName", name);
 
     updateNameInputWidth();
   }
 
+  function handleVote(vote: boolean) {
+    SOCKET.emit("vote", roomcode, vote);
+  }
+
+  function handleSpin() {
+    SOCKET.emit("spin", roomcode);
+  }
+
   function updateNameInputWidth() {
+    name = perData.persNames[perData.index];
+
     cheat.style.display = "block";
+    cheat.innerText = name;
+    console.log(cheat.innerText, name);
     isNameInputEmpty = cheat.offsetWidth === 0;
     if (isNameInputEmpty) {
       nameInputWidth = 300;
@@ -41,15 +61,28 @@
   onMount(updateNameInputWidth);
 </script>
 
+{#if perData.phaseData.phase == Phase.Vote}
+  <WheelModal
+    persNames={perData.persNames}
+    votes={perData.phaseData.votes}
+    risk={perData.phaseData.risk}
+    spinRole={perData.index === 0 ? SpinRole.Prom : SpinRole.Voter}
+    secondsToVote={perData.phaseData.secondsToVote}
+    revolutionsC={perData.phaseData.revolutionsC}
+    onVote={handleVote}
+    onSpin={handleSpin}
+  />
+{/if}
+
 <div class="title">{`Room: ${roomcode}`}</div>
 
 <Spacer space={10} />
 
 <input
   type="text"
-  bind:value={name}
   placeholder="Enter your name"
-  on:input={handleNameInputChange}
+  bind:value={name}
+  on:input={handleNameInput}
   style={`
     width: ${nameInputWidth}px;
     font-size: ${isNameInputEmpty ? 30 : 40}px;

@@ -12,9 +12,11 @@
 
   onMount(() => {
     window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("touchend", onMouseUp);
   });
   onDestroy(() => {
     window.removeEventListener("mouseup", onMouseUp);
+    window.removeEventListener("touchend", onMouseUp);
   });
 </script>
 
@@ -26,6 +28,8 @@
   `}
     on:mousedown={() => (isDown = true)}
     on:mouseup={onClick}
+    on:touchstart={()=>(isDown = true)}
+    on:touchend={onClick}
     disabled={!enabled}
   >
     <div class="front">
@@ -43,6 +47,7 @@
     padding: 0px;
     border: 0px;
     cursor: pointer;
+    outline: none;
   }
   .front {
     background-color: rgb(0, 255, 128);

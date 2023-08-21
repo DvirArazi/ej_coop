@@ -11,10 +11,8 @@
 
   export let roomcode: string;
   export let sttData: SttData;
-  console.log(sttData);
 
   let isInitModalOpen = false;
-  let is;
 
   SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
     if (sttDataNew.roomcode != roomcode) return;
@@ -31,6 +29,10 @@
   function handleRiskSet(riskNum: number) {
     SOCKET.emit("riskSet", roomcode, riskNum / DIE_RESOLUTION);
     isInitModalOpen = false;
+  }
+
+  function handleContinue() {
+    SOCKET.emit("continue", roomcode)
   }
 </script>
 
@@ -62,18 +64,21 @@
 <Spacer space={30} />
 
 {#if isInitModalOpen}
-<InitModal
-  onRiskNumSet={handleRiskSet}
-  onClose={() => (isInitModalOpen = false)}
-/>
+  <InitModal
+    onRiskNumSet={handleRiskSet}
+    onClose={() => (isInitModalOpen = false)}
+  />
 {/if}
 
 {#if sttData.phaseData.phase == Phase.Vote}
   <WheelModal
     persNames={sttData.persNames}
+    votes={sttData.phaseData.votes}
     risk={sttData.phaseData.risk}
     spinRole={SpinRole.Stt}
     secondsToVote={sttData.phaseData.secondsToVote}
+    revolutionsC={sttData.phaseData.revolutionsC}
+    onContinue={handleContinue}
   />
 {/if}
 

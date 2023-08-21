@@ -3,8 +3,10 @@
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
+  import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
-  
+  import { SpinRole } from "/@src/lib/client/types";
+
   let identified = false;
 
   let name = "";
@@ -48,6 +50,15 @@
     }
   }
 </script>
+
+<!-- <WheelModal
+  persNames={["Gal", "Avishay", "Lioz"]}
+  votes={[true, null, false]}
+  risk={0.4}
+  secondsToVote={53}
+  spinRole={SpinRole.Stt}
+  revolutions={0.3}
+/> -->
 
 <div class="title title0">{"EVERYBODY'S"}</div>
 <div class="title title1">{"JIM"}</div>
