@@ -106,7 +106,10 @@ export class Game {
   }
 
   vote(room: Room, user: User, vote: boolean): void {
-    if (room.phaseData.phase != Phase.Vote) return;
+    if (
+      room.phaseData.phase != Phase.Vote ||
+      room.phaseData.secondsToVote <= 0
+    ) return;
     const userI = findIndexN(room.pers, per => per === user);
     if (userI === null) return;
 

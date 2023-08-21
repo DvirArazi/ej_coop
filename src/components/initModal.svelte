@@ -52,7 +52,7 @@
 
     <Spacer space={40} />
 
-    <Button onClick={() => onRiskNumSet(riskNum)} enabled={riskNum !== 0}>
+    <Button onClick={() => onRiskNumSet(riskNum)} isEnabled={riskNum !== 0}>
       {"Continue"}
     </Button>
     <Spacer space={20} />

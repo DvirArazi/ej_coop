@@ -35,3 +35,8 @@ input[type="text"] {
   width: 100%;
   box-sizing: border-box;
 }
+
+img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}

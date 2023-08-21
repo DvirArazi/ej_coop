@@ -55,7 +55,7 @@
 
   <Button
     onClick={() => (isInitModalOpen = true)}
-    enabled={sttData.persNames.length >= 2}
+    isEnabled={sttData.persNames.length >= 2}
   >
     {"Start Action"}
   </Button>

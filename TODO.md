@@ -1,12 +1,15 @@
 [V] fix canvas not re-rendering
 [V] fix name not reloading in the main screen
-[ ] make voters unable to vote after voting is over
-[ ] make for & against buttons gray after press
-[ ] fix bug where the name disappers on reload
-[ ] make sure the canvas is recolored on reload
+[V] make voters unable to vote after voting is over
+[V] make it so voting stops when the time is over
+[V] make for & against buttons grey after press
+[V] fix bug where the name disappers on reload
+[V] make sure the canvas is recolored on reload
 [ ] fix instant buttons alignment
 [ ] make instant buttons work
-[ ] make the timer disapper on 0
+[V] make the timer disapper on 0
+[ ] make associations menu
+[V] disable svg dragging
 [V] Create a 404 screen
 [V] create wheel modal
 [V] create a share button

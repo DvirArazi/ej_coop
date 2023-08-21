@@ -12,21 +12,23 @@
   const skull = new Image();
   skull.src = "/svgs/skull.svg";
 
+  let isMounted = false;
   let wheelCanvas: HTMLCanvasElement;
   let wCtx: CanvasRenderingContext2D;
   let pointerCanvas: HTMLCanvasElement;
   let pCtx: CanvasRenderingContext2D;
 
-
   $: if (
     persNames !== undefined &&
     votes !== undefined &&
     risk !== undefined &&
-    tiltAngle !== undefined
+    tiltAngle !== undefined &&
+    isMounted == true
   ) {
     if (skull.complete) draw();
     else skull.onload = draw;
   }
+  onMount(() => (isMounted = true));
 
   function draw() {
     wCtx = wheelCanvas.getContext("2d")!;

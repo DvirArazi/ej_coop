@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from "svelte";
 
   export let onClick: () => void;
-  export let enabled = true;
+  export let isEnabled = true;
 
   let isDown = false;
 
@@ -28,9 +28,13 @@
   `}
     on:mousedown={() => (isDown = true)}
     on:mouseup={onClick}
-    on:touchstart={()=>(isDown = true)}
-    on:touchend={onClick}
-    disabled={!enabled}
+    on:touchstart={() => {
+      if (isEnabled) isDown = true;
+    }}
+    on:touchend={() => {
+      if (isEnabled) onClick();
+    }}
+    disabled={!isEnabled}
   >
     <div class="front">
       <slot />

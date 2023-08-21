@@ -68,27 +68,30 @@
   <Spacer space={30} />
 
   {#if spinRole === SpinRole.Stt}
-    <Button enabled={revolutionsC > 0 && isSuccess != null} onClick={onContinue}
+    <Button isEnabled={revolutionsC > 0 && isSuccess != null} onClick={onContinue}
       >{"Continue"}
     </Button>
   {:else if spinRole === SpinRole.Prom}
-    <Button enabled={!ableToVote && revolutionsC <= 0} onClick={onSpin}>
+    <Button isEnabled={!ableToVote && revolutionsC <= 0} onClick={onSpin}>
       {"Spin"}
     </Button>
   {:else}
     <div class="vote">
-      <Button enabled={ableToVote} onClick={() => onVote(true)}>
-        <img src="svgs/thumb_up_FILL0_wght400_GRAD0_opsz48.svg" alt="write" />
+      <Button isEnabled={ableToVote} onClick={() => onVote(true)}>
+        <img src={ableToVote ? "svgs/thumb_up.svg" : "svgs/thumb_up_disabled.svg"} alt="write" />
       </Button>
-      <Button enabled={ableToVote} onClick={() => onVote(false)}>
-        <img src="svgs/thumb_down_FILL0_wght400_GRAD0_opsz48.svg" alt="write" />
+      <Button isEnabled={ableToVote} onClick={() => onVote(false)}>
+        {ableToVote}
+        <!-- <img src={ableToVote ? "svgs/thumb_down.svg" : "svgs/thumb_down_disabled.svg"} alt="write" /> -->
       </Button>
     </div>
   {/if}
 
   <Spacer space={30} />
 
-  <div>{`time to vote: ${secondsToVote}s`}</div>
+  <div>
+    {secondsToVote > 0 ? `Time to vote: ${secondsToVote}s` : "Voting is over!"}
+  </div>
 </Modal>
 
 <style>

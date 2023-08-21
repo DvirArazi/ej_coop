@@ -15,7 +15,7 @@
   </div>
   {#if attemptsC !== null}
     <div class="attempts">
-      <img src="svgs/stylus_note_FILL0_wght400_GRAD0_opsz48.svg" alt="write" />
+      <img src="svgs/stylus_note.svg" alt="write" />
       <Spacer space={8} />
       {`x ${attemptsC}`}
     </div>

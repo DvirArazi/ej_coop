@@ -92,7 +92,7 @@
     </tr>
   </table>
   <Spacer space={40} />
-  <Button onClick={joinRoom} enabled={joinEnabled}>
+  <Button onClick={joinRoom} isEnabled={joinEnabled}>
     {"Join a Room"}
   </Button>
 
