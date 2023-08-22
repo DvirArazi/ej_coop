@@ -3,7 +3,9 @@
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
   import Spacer from "/@src/components/spacer.svelte";
+    import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
+    import { SpinRole } from "/@src/lib/client/types";
   import type { UserData } from "/@src/shared/types";
 
   let userData: UserData | null = null;
@@ -52,6 +54,15 @@
     }
   }
 </script>
+
+<WheelModal
+  persNames={["Flafy", "Lodea", "Nivnivniva"]}
+  risk={0.4}
+  spinRole={SpinRole.Stt}
+  votes={[true, null, false]}
+  secondsToVote={54}
+  revolutionsC={7.3}
+/>
 
 {#if userData === null}
   <Spacer space={50} />

@@ -1,8 +1,8 @@
-[ ] make red buttons
+[V] make red buttons
 [ ] make spin animation more smooth on mobile
 [V] add a room delete button
 [ ] add a leave room button
-[ ] add a remove from room button
+[V] add a remove from room button
 [V] fix name bug
 [X] fix the new name input bug
     * Couldn't replicate, not critical, will try again if bug reappears

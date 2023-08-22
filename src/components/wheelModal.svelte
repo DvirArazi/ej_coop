@@ -20,6 +20,8 @@
   export let onContinue: () => void = () => {};
   export let onClose: () => void = () => {};
 
+  let animationDiv: HTMLDivElement;
+
   let tiltAngle = 0;
   let isSuccess: boolean | null = null;
   let ableToVote = false;
@@ -29,11 +31,12 @@
 
   $: ableToVote = secondsToVote > 0;
 
-  $: if (revolutionsC != 0) {
+  $: if (animationDiv !== undefined && revolutionsC != 0) {
     startS = performance.now() / 1000;
     velocityStart = Math.sqrt(-2 * acc * revolutionsC * (2 * Math.PI));
     tiltAnglePrev = 0;
     requestAnimationFrame(spinWheel);
+    // animationDiv.style.animation = "5s 1 alternate spin";
   }
 
   function spinWheel() {
@@ -70,7 +73,13 @@
     </div>
   {/if}
 
-  <Wheel {risk} {persNames} {tiltAngle} {votes} />
+  <div
+    class="animation"
+    style="--revolutionsC: {revolutionsC}"
+    bind:this={animationDiv}
+  >
+    <Wheel {risk} {persNames} {tiltAngle} {votes} />
+  </div>
 
   <Spacer space={30} />
 
@@ -135,6 +144,15 @@
   .conclusion1 {
     position: relative;
     width: 100%;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0rad);
+    }
+    to {
+      transform: rotate(calc(var(--revolutionsC) * 2rad * pi));
+    }
   }
 
   .conclusion {

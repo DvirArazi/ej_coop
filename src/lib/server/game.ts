@@ -5,7 +5,7 @@ import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/so
 import { Phase, type GameData } from "/@src/shared/types";
 import { v4 as uuidv4 } from 'uuid';
 import { DIE_RESOLUTION, VOTE_SECONDS } from "/@src/shared/constants";
-import { findIndexN, genRand, getIsSuccess } from "/@src/shared/funcs";
+import { findIndexN, genRand, getIsSuccess, remove } from "/@src/shared/funcs";
 
 export class Game {
   private _io: Server<ClientToServerEvents, ServerToClientEvents>;
@@ -182,14 +182,27 @@ export class Game {
   deleteRoom(room: Room, user: User) {
     if (room.stt !== user) return;
 
-    this._rooms.splice(this._rooms.indexOf(room));
+    remove(this._rooms, room);
 
     const users = [...[room.stt], ...room.pers];
     for (const user of users) {
-      user.rooms.splice(user.rooms.indexOf(room));
-      this._io.to(user.socketId).emit("roomDeleted", room.code);
+      remove(user.rooms, room);
+      this._io.to(user.socketId).emit("goBack", room.code);
     }
   }
+
+  removePer(room: Room, user: User, perI: number) {
+    if (room.stt !== user) return;
+
+    const perUser = room.pers[perI];
+
+    room.pers.splice(perI, 1);
+    remove(perUser.rooms, room);
+
+    this._io.to(perUser.socketId).emit("goBack", room.code);
+
+    this.emitGameDataUpdated(room);
+  } 
 
   private generateRoomcode(): string {
     const aCode = "A".charCodeAt(0);

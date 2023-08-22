@@ -4,8 +4,6 @@
 //   }
 // }
 
-
-
 export function findIndexN<T>(
   arr: Array<T>,
   predicate: (value: T, index: number) => boolean,
@@ -17,6 +15,13 @@ export function findIndexN<T>(
 
 export function genRand(min: number, max: number): number {
   return Math.random() * (max - min) + min;
+}
+
+export function remove<T>(arr: Array<T>, value: T): void {
+  const index = arr.indexOf(value);
+  if (index === -1) return;
+
+  arr.splice(index, 1);
 }
 
 export function getIsSuccess(

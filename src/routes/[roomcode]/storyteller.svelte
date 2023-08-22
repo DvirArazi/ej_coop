@@ -42,6 +42,10 @@
   function handleDeleteRoom() {
     SOCKET.emit("deleteRoom", roomcode);
   }
+
+  function handleRemove(perI: number) {
+    SOCKET.emit("removePer", roomcode, perI);
+  }
 </script>
 
 <Spacer space={20} />
@@ -59,7 +63,11 @@
 {#if sttData.persNames.length > 0}
   <Spacer space={30} />
 
-  <PerList persNames={sttData.persNames} attemptsLeft={sttData.attemptsLeft} />
+  <PerList
+    persNames={sttData.persNames}
+    attemptsLeft={sttData.attemptsLeft}
+    onRemove={handleRemove}
+  />
 
   <Spacer space={30} />
 
@@ -74,6 +82,8 @@
 <Spacer space={30} />
 
 <Button onClick={handleDeleteRoom} isPositive={false}>{"Delete Room"}</Button>
+
+<Spacer space={30} />
 
 {#if isInitModalOpen}
   <InitModal

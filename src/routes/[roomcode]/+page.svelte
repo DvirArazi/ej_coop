@@ -20,7 +20,7 @@
     }
   }
 
-  SOCKET.on("roomDeleted", (roomcodeNew)=>{
+  SOCKET.on("goBack", (roomcodeNew)=>{
     if (roomcode === roomcodeNew) goto('/');
   });
 

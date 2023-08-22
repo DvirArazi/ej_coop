@@ -1,8 +1,10 @@
 <script lang="ts">
+  import Button from "/@src/components/button.svelte";
   import Spacer from "/@src/components/spacer.svelte";
 
   export let name: String;
   export let attemptsC: number | null = null;
+  export let onRemove: (() => void) | null = null;
 </script>
 
 <div class="outer">
@@ -19,6 +21,14 @@
       <Spacer space={8} />
       {`x ${attemptsC}`}
     </div>
+  {/if}
+
+  {#if onRemove !== null}
+    <Spacer space={30} />
+
+    <Button onClick={onRemove} isPositive={false} isPadded={false}>
+      <div class="remove">{"Remove"}</div>
+    </Button>
   {/if}
 </div>
 
@@ -52,5 +62,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+  .remove {
+    font-size: 20px;
+    padding: 5px 10px;
   }
 </style>

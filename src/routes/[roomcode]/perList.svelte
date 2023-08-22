@@ -5,17 +5,29 @@
 
   export let persNames: string[];
   export let attemptsLeft: number;
+  export let onRemove: ((perI: number) => void) | null = null;
+
+  function onRemoveNN(perI: number) {
+    onRemove!(perI);
+  }
 </script>
 
 <Container>
-  <Card name={persNames[0]} attemptsC={attemptsLeft} />
+  <Card
+    name={persNames[0]}
+    attemptsC={attemptsLeft}
+    onRemove={onRemove !== null ? () => onRemoveNN(0) : null}
+  />
 
   {#if persNames.length > 1}
     <Spacer space={20} />
     <div class="line" />
-    {#each persNames.slice(1) as name, _}
+    {#each persNames.slice(1) as name, i}
       <Spacer space={20} />
-      <Card {name} />
+      <Card
+        {name}
+        onRemove={onRemove !== null ? () => onRemoveNN(i + 1) : null}
+      />
     {/each}
   {/if}
 </Container>

@@ -188,6 +188,18 @@ export function handleSocket(
     game.deleteRoom(room, user);
   });
 
+  //===========
+  // removePer
+  //===========
+  socket.on("removePer", (roomcode, perI) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.removePer(room, user, perI);
+  });
+
   //============
   // disconnect
   //============

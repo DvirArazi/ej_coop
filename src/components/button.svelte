@@ -4,6 +4,7 @@
   export let onClick: () => void;
   export let isEnabled = true;
   export let isPositive = true;
+  export let isPadded = true;
 
   let isDown = false;
 
@@ -39,7 +40,7 @@
     }}
     disabled={!isEnabled}
   >
-    <div class="front">
+    <div class="front" style={isPadded ? "padding: 15px 25px;" : ""}>
       <slot />
     </div>
   </button>
@@ -58,7 +59,6 @@
   }
   .front {
     background-color: var(--color1);
-    padding: 15px 25px;
     border-radius: 10px;
     font-family: "Rubik";
     font-size: 24px;
