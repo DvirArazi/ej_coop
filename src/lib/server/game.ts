@@ -192,7 +192,7 @@ export class Game {
   }
 
   removePer(room: Room, user: User, perI: number) {
-    if (room.stt !== user) return;
+    if (room.stt !== user && room.pers[perI] !== user) return;
 
     const perUser = room.pers[perI];
 

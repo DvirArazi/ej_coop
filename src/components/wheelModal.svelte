@@ -22,37 +22,36 @@
 
   let animationDiv: HTMLDivElement;
 
-  let tiltAngle = 0;
   let isSuccess: boolean | null = null;
   let ableToVote = false;
-  let startS = 0;
-  let velocityStart = 0;
-  let tiltAnglePrev = 0;
+  let spinTime = 0;
 
   $: ableToVote = secondsToVote > 0;
 
   $: if (animationDiv !== undefined && revolutionsC != 0) {
-    startS = performance.now() / 1000;
-    velocityStart = Math.sqrt(-2 * acc * revolutionsC * (2 * Math.PI));
-    tiltAnglePrev = 0;
-    requestAnimationFrame(spinWheel);
-    // animationDiv.style.animation = "5s 1 alternate spin";
+    const velocityStart = Math.sqrt(-2 * acc * revolutionsC * (2 * Math.PI));
+
+    spinTime = -velocityStart / (2 * acc);
+
+    setTimeout(() => {
+      isSuccess = getIsSuccess(revolutionsC, risk, votes);;
+    }, spinTime * 1000);
   }
 
-  function spinWheel() {
-    const passedS = performance.now() / 1000 - startS;
+  // function spinWheel() {
+  //   const passedS = performance.now() / 1000 - startS;
 
-    tiltAnglePrev = tiltAngle;
+  //   tiltAnglePrev = tiltAngle;
 
-    tiltAngle = velocityStart * passedS + (acc * passedS * passedS) / 2;
+  //   tiltAngle = velocityStart * passedS + (acc * passedS * passedS) / 2;
 
-    if (tiltAngle - tiltAnglePrev <= 0) {
-      isSuccess = getIsSuccess(revolutionsC, risk, votes);
-      return;
-    }
+  //   if (tiltAngle - tiltAnglePrev <= 0) {
+  //     isSuccess = getIsSuccess(revolutionsC, risk, votes);
+  //     return;
+  //   }
 
-    requestAnimationFrame(spinWheel);
-  }
+  //   requestAnimationFrame(spinWheel);
+  // }
 </script>
 
 <Modal>
@@ -74,11 +73,11 @@
   {/if}
 
   <div
-    class="animation"
-    style="--revolutionsC: {revolutionsC}"
+    class={revolutionsC > 0 ? "animation" : ""}
+    style="--revolutionsC: {revolutionsC}; --spinTime: {spinTime}"
     bind:this={animationDiv}
   >
-    <Wheel {risk} {persNames} {tiltAngle} {votes} />
+    <Wheel {risk} {persNames} {spinTime} {votes} />
   </div>
 
   <Spacer space={30} />
@@ -132,6 +131,7 @@
     line-height: 15px;
     transform: translateX(15px);
     cursor: pointer;
+    outline: none;
   }
 
   .vote {
@@ -146,6 +146,12 @@
     width: 100%;
   }
 
+  /* .animation {
+    animation-name: spin;
+    animation: spin calc(var(--spinTime) * 1s)
+      cubic-bezier(0.333, 0.666, 0.666, 1) 0s 1 forwards;
+  }
+
   @keyframes spin {
     from {
       transform: rotate(0rad);
@@ -153,7 +159,7 @@
     to {
       transform: rotate(calc(var(--revolutionsC) * 2rad * pi));
     }
-  }
+  } */
 
   .conclusion {
     position: absolute;

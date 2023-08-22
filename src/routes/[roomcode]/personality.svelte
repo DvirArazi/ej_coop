@@ -7,6 +7,7 @@
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SpinRole } from "/@src/lib/client/types";
   import InstantModal from "/@src/components/instantModal.svelte";
+    import Button from "/@src/components/button.svelte";
 
   export let roomcode: string;
   export let perData: PerData;
@@ -46,6 +47,10 @@
 
   function handleSpin() {
     SOCKET.emit("spin", roomcode);
+  }
+
+  function handleLeaveRoom() {
+    SOCKET.emit("removePer", roomcode, perData.index);
   }
 
   onMount(() => {
@@ -96,6 +101,12 @@
   bind:innerText={name}
   class="cheat"
 />
+
+<Spacer space={30} />
+
+<Button onClick={handleLeaveRoom} isPositive={false}>{"Leave Room"}</Button>
+
+<Spacer space={30} />
 
 <style>
   input[type="text"] {

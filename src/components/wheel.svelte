@@ -5,7 +5,7 @@
   export let persNames: string[];
   export let votes: (boolean | null)[];
   export let risk: number;
-  export let tiltAngle: number;
+  export let spinTime: number;
 
   const w = 500;
   const h = 500;
@@ -22,7 +22,7 @@
     persNames !== undefined &&
     votes !== undefined &&
     risk !== undefined &&
-    tiltAngle !== undefined &&
+    spinTime !== undefined &&
     isMounted == true
   ) {
     if (skull.complete) draw();
@@ -136,11 +136,11 @@
   </div>
   <div class="padder" />
   <canvas
-    class="wheel"
+    class="wheel animation"
     bind:this={wheelCanvas}
     width={w}
     height={h}
-    style={`transform: rotate(${tiltAngle}rad)`}
+    style="--spinTime: {spinTime};"
   />
 </div>
 
@@ -167,5 +167,20 @@
 
     border-radius: 100%;
     box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .animation {
+    animation-name: spin;
+    animation: spin calc(var(--spinTime) * 1s)
+      cubic-bezier(0.333, 0.666, 0.666, 1) 0s 1 forwards;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0rad);
+    }
+    to {
+      transform: rotate(calc(var(--revolutionsC) * 2rad * pi));
+    }
   }
 </style>

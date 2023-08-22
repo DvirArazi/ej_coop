@@ -21,7 +21,7 @@
 
   {#if persNames.length > 1}
     <Spacer space={20} />
-    <div class="line" />
+    <hr />
     {#each persNames.slice(1) as name, i}
       <Spacer space={20} />
       <Card
@@ -33,8 +33,10 @@
 </Container>
 
 <style>
-  .line {
-    border-bottom: 3px solid black;
+  hr {
+    height: 2px;
+    border: none;
+    background: black;
     margin: 0 15px;
   }
 </style>

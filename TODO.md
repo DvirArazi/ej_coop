@@ -1,7 +1,8 @@
+[V] remove all outlines
 [V] make red buttons
-[ ] make spin animation more smooth on mobile
+[V] make spin animation more smooth on mobile
 [V] add a room delete button
-[ ] add a leave room button
+[V] add a leave room button
 [V] add a remove from room button
 [V] fix name bug
 [X] fix the new name input bug

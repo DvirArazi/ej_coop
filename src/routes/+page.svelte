@@ -13,12 +13,6 @@
   let joinEnabled = false;
   let noRoom = false;
 
-  // SOCKET.on("identified", (userDataNew) => {
-  //   userData = userDataNew;
-
-  //   console.log("userData: ", userData);
-  // });
-
   SOCKET.emit("getUserData", (userDataNew) => {
     userData = userDataNew;
   });
@@ -54,15 +48,6 @@
     }
   }
 </script>
-
-<WheelModal
-  persNames={["Flafy", "Lodea", "Nivnivniva"]}
-  risk={0.4}
-  spinRole={SpinRole.Stt}
-  votes={[true, null, false]}
-  secondsToVote={54}
-  revolutionsC={7.3}
-/>
 
 {#if userData === null}
   <Spacer space={50} />

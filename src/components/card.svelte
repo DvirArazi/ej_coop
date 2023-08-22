@@ -24,7 +24,7 @@
   {/if}
 
   {#if onRemove !== null}
-    <Spacer space={30} />
+    <Spacer space={10} />
 
     <Button onClick={onRemove} isPositive={false} isPadded={false}>
       <div class="remove">{"Remove"}</div>
