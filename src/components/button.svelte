@@ -3,6 +3,7 @@
 
   export let onClick: () => void;
   export let isEnabled = true;
+  export let isPositive = true;
 
   let isDown = false;
 
@@ -25,6 +26,8 @@
     style={`
     padding-bottom: ${isDown ? 0 : 7}px;
     margin-top: ${isDown ? 7 : 0}px;
+    --color0: ${isPositive ? "#00e673" : "#FF0000"};
+    --color1: ${isPositive ? "#00ff80" : "#FF4D4D"};
   `}
     on:mousedown={() => (isDown = true)}
     on:mouseup={onClick}
@@ -44,7 +47,7 @@
 
 <style>
   button {
-    background-color: rgb(0, 230, 115);
+    background-color: var(--color0);
     border-radius: 10px;
     width: fit-content;
     margin: auto;
@@ -54,11 +57,11 @@
     outline: none;
   }
   .front {
-    background-color: rgb(0, 255, 128);
+    background-color: var(--color1);
     padding: 15px 25px;
     border-radius: 10px;
     font-family: "Rubik";
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 900;
   }
 </style>

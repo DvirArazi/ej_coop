@@ -1,4 +1,10 @@
-[ ] fix the new name input bug
+[ ] make red buttons
+[ ] make spin animation more smooth on mobile
+[V] add a room delete button
+[ ] add a leave room button
+[ ] add a remove from room button
+[V] fix name bug
+[X] fix the new name input bug
     * Couldn't replicate, not critical, will try again if bug reappears
 [V] add a cancel spin (X) button
 [V] test if the wheel will roll more smoothly without the updates every second
@@ -12,7 +18,7 @@
 [V] fix instant buttons alignment
 [V] make instant buttons work
 [V] make the timer disapper on 0
-[ ] make associations menu
+[V] make associations menu
 [V] disable svg dragging
 [V] Create a 404 screen
 [V] create wheel modal

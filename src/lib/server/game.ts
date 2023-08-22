@@ -179,6 +179,18 @@ export class Game {
     this.emitGameDataUpdated(room);
   }
 
+  deleteRoom(room: Room, user: User) {
+    if (room.stt !== user) return;
+
+    this._rooms.splice(this._rooms.indexOf(room));
+
+    const users = [...[room.stt], ...room.pers];
+    for (const user of users) {
+      user.rooms.splice(user.rooms.indexOf(room));
+      this._io.to(user.socketId).emit("roomDeleted", room.code);
+    }
+  }
+
   private generateRoomcode(): string {
     const aCode = "A".charCodeAt(0);
     const zCode = "Z".charCodeAt(0);

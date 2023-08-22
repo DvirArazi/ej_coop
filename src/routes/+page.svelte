@@ -107,12 +107,23 @@
 
   <Spacer space={30} />
 
-  <div>
-    {"Return to:"}
+  {#if userData.associations.length > 0}
+    <div>{"Return to:"}</div>
     {#each userData.associations as association}
-      <Button onClick={() => {}}>{"button"}</Button>
+      <Spacer space={20} />
+      <Button
+        onClick={() => {
+          goto(`/${association.roomcode}`);
+        }}
+      >
+        {`room ${association.roomcode} as ${
+          association.isStt ? "the storyteller" : " a personality"
+        }`}
+      </Button>
     {/each}
-  </div>
+
+    <Spacer space={30} />
+  {/if}
 {/if}
 
 <style>

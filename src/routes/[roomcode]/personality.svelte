@@ -16,6 +16,19 @@
   let name: string;
   let isNameInputEmpty = false;
 
+  $: if (cheat !== undefined) {
+    cheat.style.display = "block";
+    cheat.innerText = name;
+    isNameInputEmpty = cheat.offsetWidth === 0;
+    if (isNameInputEmpty) {
+      nameInputWidth = 200;
+    } else {
+      const w = cheat.offsetWidth + 15;
+      nameInputWidth = w > 150 ? w : 150;
+    }
+    cheat.style.display = "none";
+  }
+
   SOCKET.on("personalityDataUpdated", (perDataNew) => {
     if (perDataNew.roomcode != roomcode) return;
 
@@ -24,11 +37,7 @@
   });
 
   function handleNameInput(event: Event) {
-    // let target = event.target as HTMLInputElement;
-    // target.value = name;
     SOCKET.emit("updateName", name);
-
-    updateNameInputWidth();
   }
 
   function handleVote(vote: boolean) {
@@ -39,24 +48,10 @@
     SOCKET.emit("spin", roomcode);
   }
 
-  function updateNameInputWidth() {
-    console.log(perData);
-
+  onMount(() => {
     name = perData.persNames[perData.index];
-
-    cheat.style.display = "block";
     cheat.innerText = name;
-    isNameInputEmpty = cheat.offsetWidth === 0;
-    if (isNameInputEmpty) {
-      nameInputWidth = 300;
-    } else {
-      const w = cheat.offsetWidth + 15;
-      nameInputWidth = w > 150 ? w : 150;
-    }
-    cheat.style.display = "none";
-  }
-
-  onMount(updateNameInputWidth);
+  });
 </script>
 
 {#if perData.phaseData.phase == Phase.Vote}
@@ -87,7 +82,7 @@
   on:input={handleNameInput}
   style={`
     width: ${nameInputWidth}px;
-    font-size: ${isNameInputEmpty ? 30 : 40}px;
+    font-size: ${isNameInputEmpty ? 24 : 35}px;
   `}
 />
 
@@ -116,6 +111,6 @@
   }
   input[type="text"],
   .cheat {
-    font-size: 40px;
+    font-size: 35px;
   }
 </style>

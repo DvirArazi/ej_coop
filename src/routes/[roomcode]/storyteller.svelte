@@ -38,7 +38,13 @@
   function handleCancelSpin() {
     SOCKET.emit("cancelSpin", roomcode);
   }
+
+  function handleDeleteRoom() {
+    SOCKET.emit("deleteRoom", roomcode);
+  }
 </script>
+
+<Spacer space={20} />
 
 <div class="title">{`Room: ${roomcode}`}</div>
 
@@ -50,9 +56,9 @@
 
 <Button onClick={onShareClick}>{"Share Room Link"}</Button>
 
-<Spacer space={30} />
-
 {#if sttData.persNames.length > 0}
+  <Spacer space={30} />
+
   <PerList persNames={sttData.persNames} attemptsLeft={sttData.attemptsLeft} />
 
   <Spacer space={30} />
@@ -66,6 +72,8 @@
 {/if}
 
 <Spacer space={30} />
+
+<Button onClick={handleDeleteRoom} isPositive={false}>{"Delete Room"}</Button>
 
 {#if isInitModalOpen}
   <InitModal

@@ -8,7 +8,7 @@
   import Spacer from "/@src/components/spacer.svelte";
 
   export let data: PageData;
-  
+
   let roomcode = data.params.roomcode;
   let gameData: GameData | "loading" | null = "loading";
 
@@ -19,6 +19,10 @@
       goto(`/${roomcodeUpper}`);
     }
   }
+
+  SOCKET.on("roomDeleted", (roomcodeNew)=>{
+    if (roomcode === roomcodeNew) goto('/');
+  });
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     gameData = gameDataNew;

@@ -4,6 +4,7 @@ export interface ServerToClientEvents {
   // identified: (userData: UserData) => void;
   storytellerDataUpdated: (sttData: SttData) => void;
   personalityDataUpdated: (perData: PerData) => void;
+  roomDeleted: (roomcode: string) => void;
 }
 
 export interface ClientToServerEvents {
@@ -21,4 +22,7 @@ export interface ClientToServerEvents {
   spin: (roomcode: string) => void;
   continue: (roomcode: string) => void;
   cancelSpin: (roomcode: string) => void;
+  deleteRoom: (roomcode: string) => void;
+  removePer: (roomcode: string) => void;
+  leaveRoom: (roomcode: string) => void;
 }

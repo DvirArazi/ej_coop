@@ -177,6 +177,18 @@ export function handleSocket(
   });
 
   //============
+  // deleteRoom
+  //============
+  socket.on("deleteRoom", (roomcode) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+    const room = game.findRoomByRoomcode(roomcode);
+    if (room === null) return;
+
+    game.deleteRoom(room, user);
+  });
+
+  //============
   // disconnect
   //============
   socket.on("disconnect", () => {
