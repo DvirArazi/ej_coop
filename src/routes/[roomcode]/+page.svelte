@@ -8,7 +8,10 @@
   import Spacer from "/@src/components/spacer.svelte";
 
   export let data: PageData;
+  
   let roomcode = data.params.roomcode;
+  let gameData: GameData | "loading" | null = "loading";
+
   {
     let roomcodeUpper = roomcode.toUpperCase();
     if (roomcode !== roomcodeUpper) {
@@ -16,7 +19,7 @@
       goto(`/${roomcodeUpper}`);
     }
   }
-  let gameData: GameData | "loading" | null = "loading";
+
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     gameData = gameDataNew;
   });

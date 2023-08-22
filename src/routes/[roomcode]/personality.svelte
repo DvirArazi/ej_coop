@@ -11,8 +11,6 @@
   export let roomcode: string;
   export let perData: PerData;
 
-  console.log(perData);
-
   let cheat: HTMLDivElement;
   let nameInputWidth: number;
   let name: string;
@@ -20,8 +18,6 @@
 
   SOCKET.on("personalityDataUpdated", (perDataNew) => {
     if (perDataNew.roomcode != roomcode) return;
-
-    console.log(perDataNew);
 
     perData = perDataNew;
     name = perData.persNames[perData.index];
@@ -44,11 +40,12 @@
   }
 
   function updateNameInputWidth() {
+    console.log(perData);
+
     name = perData.persNames[perData.index];
 
     cheat.style.display = "block";
     cheat.innerText = name;
-    console.log(cheat.innerText, name);
     isNameInputEmpty = cheat.offsetWidth === 0;
     if (isNameInputEmpty) {
       nameInputWidth = 300;

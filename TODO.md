@@ -1,4 +1,5 @@
 [ ] fix the new name input bug
+    * Couldn't replicate, not critical, will try again if bug reappears
 [V] add a cancel spin (X) button
 [V] test if the wheel will roll more smoothly without the updates every second
 [V] fix canvas not re-rendering

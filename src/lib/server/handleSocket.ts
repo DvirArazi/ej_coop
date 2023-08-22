@@ -3,7 +3,7 @@ import type { Game } from "/@src/lib/server/game";
 import type { ClientToServerEvents, ServerToClientEvents } from "/@src/shared/socketIoTypes";
 import type { User } from "/@src/lib/server/types";
 import { findIndexN } from "/@src/shared/funcs";
-import type { GameData } from "/@src/shared/types";
+import type { GameData, RoleData } from "/@src/shared/types";
 
 export function handleSocket(
   socket: Socket<ClientToServerEvents, ServerToClientEvents>,
@@ -23,16 +23,24 @@ export function handleSocket(
     }
 
     callback(user.id);
+  });
 
-    socket.emit("identified",
-      user.name,
-      user.rooms.map(room => {
+  //=============
+  // getUserData
+  //=============
+  socket.on("getUserData", (callback) => {
+    const user = game.findUserBySocketId(socket.id);
+    if (user === null) return;
+
+    callback({
+      name: user.name,
+      associations: user.rooms.map(room => {
         return {
           roomcode: room.code,
           isStt: room.stt === user
         }
       })
-    );
+    });
   });
 
   //============
@@ -75,25 +83,24 @@ export function handleSocket(
 
       const persNames = room.pers.map(per => per.name);
 
+      const roleData: RoleData = {
+        roomcode: roomcode,
+        persNames: persNames,
+        attemptsLeft: room.attemptsLeft,
+        phaseData: room.phaseData,
+      }
+
       if (isStt) {
         return {
           isStt: true,
-          sttData: {
-            roomcode: roomcode,
-            persNames: persNames,
-            attemptsLeft: room.attemptsLeft,
-            phaseData: room.phaseData,
-          }
+          sttData: roleData
         };
       } else {
         return {
           isStt: false,
           perData: {
-            index: findIndexN(room.pers, per => per === user)!,
-            roomcode: roomcode,
-            persNames: persNames,
-            attemptsLeft: room.attemptsLeft,
-            phaseData: room.phaseData,
+            ...{ index: findIndexN(room.pers, per => per === user)! },
+            ...roleData,
           }
         };
       }

@@ -2,27 +2,28 @@
   import { goto } from "$app/navigation";
   import Button from "/@src/components/button.svelte";
   import Container from "/@src/components/container.svelte";
-    import InstantModal from "/@src/components/instantModal.svelte";
   import Spacer from "/@src/components/spacer.svelte";
-  import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
-  import { SpinRole } from "/@src/lib/client/types";
+  import type { UserData } from "/@src/shared/types";
 
-  let identified = false;
-
-  let name = "";
+  let userData: UserData | null = null;
   let roomcode = "";
   let joinEnabled = false;
   let noRoom = false;
 
-  SOCKET.on("identified", (nameNew, associations) => {
-    name = nameNew;
+  // SOCKET.on("identified", (userDataNew) => {
+  //   userData = userDataNew;
 
-    identified = true;
+  //   console.log("userData: ", userData);
+  // });
+
+  SOCKET.emit("getUserData", (userDataNew) => {
+    userData = userDataNew;
   });
 
   $: {
-    joinEnabled = name !== "" && roomcode.length === 4;
+    joinEnabled =
+      userData !== null && userData.name !== "" && roomcode.length === 4;
   }
 
   function createRoom() {
@@ -46,70 +47,73 @@
   }
 
   function handleNameInputChange() {
-    if (identified) {
-      SOCKET.emit("updateName", name);
+    if (userData !== null) {
+      SOCKET.emit("updateName", userData.name);
     }
   }
 </script>
 
-<!-- <WheelModal
-  persNames={["Gal", "Avishay", "Lioz"]}
-  votes={[true, null, false]}
-  risk={0.4}
-  secondsToVote={53}
-  spinRole={SpinRole.Stt}
-  revolutions={0.3}
-/> -->
+{#if userData === null}
+  <Spacer space={50} />
+  <div>{"Loading..."}</div>
+{:else}
+  <div class="title title0">{"EVERYBODY'S"}</div>
+  <div class="title title1">{"JIM"}</div>
 
-<div class="title title0">{"EVERYBODY'S"}</div>
-<div class="title title1">{"JIM"}</div>
+  <Spacer space={30} />
 
-<Spacer space={30} />
+  <Button onClick={createRoom}>{"Create a Room"}</Button>
 
-<Button onClick={createRoom}>{"Create a Room"}</Button>
+  <Spacer space={30} />
 
-<Spacer space={30} />
+  <Container>
+    <table>
+      <tr>
+        <td class="text">{"Your Name:"}</td>
+        <td class="line">
+          <input
+            type="text"
+            bind:value={userData.name}
+            on:input={handleNameInputChange}
+          />
+        </td>
+      </tr>
+      <Spacer space={10} />
+      <tr>
+        <td class="text">{"Room Code:"}</td>
+        <td class="line">
+          <input
+            type="text"
+            class="roomcode"
+            bind:value={roomcode}
+            placeholder="XXXX"
+            on:input={handleRoomcodeInputChange}
+          />
+        </td>
+      </tr>
+    </table>
+    <Spacer space={40} />
+    <Button onClick={joinRoom} isEnabled={joinEnabled}>
+      {"Join a Room"}
+    </Button>
 
-<Container>
-  <table>
-    <tr>
-      <td class="text">{"Your Name:"}</td>
-      <td class="line">
-        <input type="text" bind:value={name} on:input={handleNameInputChange} />
-      </td>
-    </tr>
-    <Spacer space={10} />
-    <tr>
-      <td class="text">{"Room Code:"}</td>
-      <td class="line">
-        <input
-          type="text"
-          class="roomcode"
-          bind:value={roomcode}
-          placeholder="XXXX"
-          on:input={handleRoomcodeInputChange}
-        />
-      </td>
-    </tr>
-  </table>
-  <Spacer space={40} />
-  <Button onClick={joinRoom} isEnabled={joinEnabled}>
-    {"Join a Room"}
-  </Button>
+    {#if noRoom}
+      <Spacer space={10} />
+      <div class="red">{"Room does not exist"}</div>
+    {/if}
 
-  {#if noRoom}
-    <Spacer space={10} />
-    <div class="red">{"Room does not exist"}</div>
-  {/if}
+    <Spacer space={5} />
+  </Container>
 
-  <Spacer space={5} />
-</Container>
+  <Spacer space={30} />
 
-<Spacer space={30} />
-
-<div>
-  {"Return to:"}
-</div>
+  <div>
+    {"Return to:"}
+    {#each userData.associations as association}
+      <Button onClick={() => {}}>{"button"}</Button>
+    {/each}
+  </div>
+{/if}
 
 <style>
   td {

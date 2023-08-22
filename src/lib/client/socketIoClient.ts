@@ -11,7 +11,8 @@ export let SOCKET: Socket<ServerToClientEvents, ClientToServerEvents> = io();
 export async function initSocketIoClient(): Promise<void> {
   return new Promise<void>((resolve) => {
     onMount(() => {
-      SOCKET.emit("checkId", getCookie("id"), (idNew) => {
+      const id = getCookie("id");
+      SOCKET.emit("checkId", id !== undefined ? id : null, (idNew) => {
         if (idNew === null) return;
 
         setCookie("id", idNew);

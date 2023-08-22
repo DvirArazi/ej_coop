@@ -3,6 +3,11 @@ export type Association = {
   isStt: boolean
 }
 
+export type UserData = {
+  name: string,
+  associations: Association[],
+}
+
 export type RoleData = {
   roomcode: string,
   persNames: string[],
