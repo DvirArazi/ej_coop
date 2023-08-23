@@ -11,9 +11,17 @@ input[type="text"] {
   outline: none;
 }
 
+html {
+  background-color: #9bffff;
+  background-image: url("/svgs/ssspiral.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 body {
   text-align: center;
-  background-color: rgb(155, 255, 255);
   user-select: none;
 }
 

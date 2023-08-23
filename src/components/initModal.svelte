@@ -8,7 +8,7 @@
   export let onRiskNumSet: (risk: number | boolean) => void;
   export let onClose: () => void;
 
-  let riskNum: number | null = 0;
+  let riskNum: number | null = null;
 
   function handleRiskInput(event: Event) {
     const max = DIE_RESOLUTION - 1;
@@ -63,13 +63,15 @@
     <Spacer space={20} />
   </Container>
 
-  <Spacer space={40} />
+  <Spacer space={30} />
 
   <Button onClick={() => onRiskNumSet(true)}>{"Instant Success"}</Button>
 
-  <Spacer space={30} />
+  <Spacer space={20} />
 
-  <Button onClick={() => onRiskNumSet(false)}>{"Instant Failure"}</Button>
+  <Button onClick={() => onRiskNumSet(false)} isPositive={false}>{"Instant Failure"}</Button>
+
+  <Spacer space={10} />
 </Modal>
 
 <style>
@@ -105,7 +107,7 @@
 
   input[type="text"] {
     text-align: center;
-    max-width: 70px;
+    max-width: 80px;
     font-size: 40px;
   }
 </style>

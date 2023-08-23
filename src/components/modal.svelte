@@ -29,15 +29,16 @@
     background-color: transparent;
     width: 100%;
     height: 100%;
-    padding-top: 200px;
+    padding-top: 100px;
 
     overflow-x: hidden;
   }
 
   .outer {
+    border: solid black 3px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0px 5px 10px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.25);
     max-width: 400px;
     text-align: center;
     margin: auto;

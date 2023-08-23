@@ -34,7 +34,7 @@
     spinTime = -velocityStart / (2 * acc);
 
     setTimeout(() => {
-      isSuccess = getIsSuccess(revolutionsC, risk, votes);;
+      isSuccess = getIsSuccess(revolutionsC, risk, votes);
     }, spinTime * 1000);
   }
 

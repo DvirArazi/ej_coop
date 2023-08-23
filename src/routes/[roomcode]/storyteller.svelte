@@ -2,6 +2,7 @@
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
   import InstantModal from "/@src/components/instantModal.svelte";
+  import RoomcodeText from "/@src/components/roomcodeText.svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
@@ -50,7 +51,7 @@
 
 <Spacer space={20} />
 
-<div class="title">{`Room: ${roomcode}`}</div>
+<RoomcodeText {roomcode} />
 
 <Spacer space={10} />
 
@@ -111,10 +112,3 @@
     />
   {/if}
 {/if}
-
-<style>
-  .title {
-    font-family: "Secular One";
-    font-weight: 00;
-  }
-</style>

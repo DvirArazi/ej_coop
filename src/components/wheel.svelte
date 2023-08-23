@@ -135,38 +135,52 @@
     <canvas class="pointer" bind:this={pointerCanvas} width={w} height={h} />
   </div>
   <div class="padder" />
-  <canvas
-    class="wheel animation"
-    bind:this={wheelCanvas}
-    width={w}
-    height={h}
-    style="--spinTime: {spinTime};"
-  />
+  <div class="shadow">
+    <canvas
+      class="wheel {spinTime > 0 ? 'animation' : ''}"
+      bind:this={wheelCanvas}
+      width={w}
+      height={h}
+      style="--spinTime: {spinTime};"
+    />
+  </div>
 </div>
 
 <style>
   .container {
     position: relative;
   }
+
   .wrapper {
     position: absolute;
     width: 100%;
     z-index: 10;
   }
+
   .pointer {
     width: 100%;
     height: 100%;
   }
+
   .padder {
     padding-top: 5%;
   }
+
+  .shadow {
+    border: solid black 3px;
+    border-radius: 100%;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
+    /* height: calc(100% - 80px); */
+  }
+
   .wheel {
+    display: block;
     transform-origin: 50% 50%;
     width: 100%;
     height: 100%;
 
     border-radius: 100%;
-    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 1);
   }
 
   .animation {

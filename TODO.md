@@ -26,11 +26,11 @@
 [V] create a share button
 [V] fix skull
 [V] fix fonts
-[ ] change line divs to "hr"s
+[V] change line divs to "hr"s
 [V] fix load nagging
-[ ] make a cool different color to the name of the player
-[ ] ask someone to help you with colors
+[V] make a cool different color to the name of the player
+[V] ask someone to help you with colors
 [V] check what to do with stupid sharing button
 [ ] add node server to production
-[ ] remove all console.logs
+[V] remove all console.logs
 [ ] deploy to heroku

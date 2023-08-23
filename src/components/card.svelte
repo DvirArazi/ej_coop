@@ -4,10 +4,11 @@
 
   export let name: String;
   export let attemptsC: number | null = null;
+  export let isMe = false;
   export let onRemove: (() => void) | null = null;
 </script>
 
-<div class="outer">
+<div class="outer" style={isMe ? "border-color: #000" : ""}>
   <div class={`name`}>
     {#if name !== ""}
       {name}
@@ -38,6 +39,8 @@
     transform: translateY(-3px);
   }
   .outer {
+    border: solid #00994d 3px;
+
     background-color: rgb(0, 255, 128);
     border-radius: 5px;
     padding: 10px 15px;

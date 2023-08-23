@@ -7,7 +7,8 @@
   import WheelModal from "/@src/components/wheelModal.svelte";
   import { SpinRole } from "/@src/lib/client/types";
   import InstantModal from "/@src/components/instantModal.svelte";
-    import Button from "/@src/components/button.svelte";
+  import Button from "/@src/components/button.svelte";
+  import RoomcodeText from "/@src/components/roomcodeText.svelte";
 
   export let roomcode: string;
   export let perData: PerData;
@@ -76,7 +77,9 @@
   {/if}
 {/if}
 
-<div class="title">{`Room: ${roomcode}`}</div>
+<Spacer space={20} />
+
+<RoomcodeText {roomcode} />
 
 <Spacer space={10} />
 
@@ -93,7 +96,11 @@
 
 <Spacer space={60} />
 
-<PerList persNames={perData.persNames} attemptsLeft={perData.attemptsLeft} />
+<PerList
+  persNames={perData.persNames}
+  attemptsLeft={perData.attemptsLeft}
+  meI={perData.index}
+/>
 
 <div
   contenteditable="true"
@@ -113,13 +120,11 @@
     width: 300px;
     text-align: center;
   }
-  .title {
-    font-family: "Secular One";
-    font-weight: 00;
-  }
+
   .cheat {
     width: min-content;
   }
+
   input[type="text"],
   .cheat {
     font-size: 35px;
