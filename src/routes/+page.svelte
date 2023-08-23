@@ -126,26 +126,32 @@
   td {
     box-sizing: border-box;
   }
+
   input[type="text"] {
     text-align: center;
   }
+
   .title {
     font-family: "Secular One";
   }
+
   .title0 {
     font-size: 50px;
   }
+
   .title1 {
     font-size: 210px;
     line-height: 150px;
   }
+
   .coop {
     line-height: 0px;
     font-size: 70px;
-    color: #A2E8FF;
-    /* -webkit-text-stroke: 3px #a2e8ff; */
+    color: #a2e8ff;
 
+    
     transform: rotate(-6deg);
+    animation: grow-shrink 3s ease-in-out infinite;
 
     text-shadow: rgb(0, 0, 0) 6px 0px 0px, rgb(0, 0, 0) 5.91686px 0.995377px 0px,
       rgb(0, 0, 0) 5.66974px 1.96317px 0px, rgb(0, 0, 0) 5.2655px 2.87655px 0px,
@@ -181,7 +187,18 @@
       rgb(0, 0, 0) 5.40307px -2.60899px 0px,
       rgb(0, 0, 0) 5.76102px -1.67649px 0px,
       rgb(0, 0, 0) 5.95932px -0.697531px 0px;
-    /* paint-order: stroke fill; */
+  }
+
+  @keyframes grow-shrink {
+    0% {
+      transform: rotate(-6deg) scale(1);
+    }
+    50% {
+      transform: rotate(-5deg) scale(1.1);
+    }
+    100% {
+      transform: rotate(-6deg) scale(1);
+    }
   }
 
   .text {
