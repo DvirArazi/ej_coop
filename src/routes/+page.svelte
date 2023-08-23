@@ -148,7 +148,8 @@
     line-height: 0px;
     font-size: 70px;
     color: #a2e8ff;
-
+    width: 80%;
+    margin: auto;
     
     transform: rotate(-6deg);
     animation: grow-shrink 3s ease-in-out infinite;

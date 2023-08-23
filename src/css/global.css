@@ -13,11 +13,8 @@ input[type="text"] {
 
 html {
   background-color: #9bffff;
-  background-image: url("/svgs/ssspiral.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+
+  overflow-x: hidden;
 }
 
 body {
