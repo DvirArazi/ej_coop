@@ -11,6 +11,9 @@ export default defineConfig({
 			configureServer: (server) => {
 				initSocketIoServer(server.httpServer as http.Server);
 			},
+			configurePreviewServer(server) {
+				initSocketIoServer(server.httpServer as http.Server);
+			},
 		},
 	],
 	resolve: {
