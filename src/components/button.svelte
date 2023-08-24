@@ -24,7 +24,6 @@
 
 <div>
   <button
-    class={isDown ? "" : "shadow"}
     style={`
     padding-bottom: ${isDown ? 3 : 7}px;
     margin-top: ${isDown ? 7 : 3}px;
@@ -41,10 +40,9 @@
     }}
     disabled={!isEnabled}
   >
-    <div class="shadowFix">
-      <div class="front" style={isPadded ? "padding: 15px 25px;" : ""}>
-        <slot />
-      </div>
+    <div class="inner {isDown ? '' : 'shadow'}" />
+    <div class="front" style={isPadded ? "padding: 15px 25px;" : ""}>
+      <slot />
     </div>
   </button>
 </div>
@@ -53,27 +51,20 @@
   button {
     box-sizing: border-box;
     border: solid black 3px;
-    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.7),
-      2px 2px 0px 0px rgba(0, 0, 0, 0.7), 1px 1px 0px 0px rgba(0, 0, 0, 0.7);
 
     background-color: var(--color0);
     border-radius: 12px;
     width: fit-content;
     margin: auto;
     padding: 0px;
-    /* border: 0px; */
     cursor: pointer;
     outline: none;
+    z-index: 10;
+
+    position: relative;
   }
 
-  /* .shadowFix {
-    width: 100%;
-    height: 100%;
-    box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 1);
-  } */
-
   .front {
-    /* border-style: solid; */
     background-color: var(--color1);
     border-radius: 10px;
     font-family: "Rubik";
@@ -81,9 +72,22 @@
     font-weight: 900;
   }
 
+  .inner {
+    border-radius: 10px;
+    position: absolute;
+    background-color: transparent;
+    margin-top: 7px;
+    width: 100%;
+    height: calc(100% - 7px);
+    z-index: -1;
+
+    box-shadow:
+      2px 2px 0px 3px rgba(0, 0, 0, 1), 1px 1px 0px 3px rgba(0, 0, 0, 1);
+  }
+
   .shadow {
-    box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 1),
-      4px 4px 0px 0px rgba(0, 0, 0, 1), 3px 3px 0px 0px rgba(0, 0, 0, 1),
-      2px 2px 0px 0px rgba(0, 0, 0, 1), 1px 1px 0px 0px rgba(0, 0, 0, 1);
+    box-shadow: 5px 5px 0px 3px rgba(0, 0, 0, 1),
+      4px 4px 0px 3px rgba(0, 0, 0, 1), 3px 3px 0px 3px rgba(0, 0, 0, 1),
+      2px 2px 0px 3px rgba(0, 0, 0, 1), 1px 1px 0px 3px rgba(0, 0, 0, 1);
   }
 </style>
