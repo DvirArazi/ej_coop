@@ -8,7 +8,7 @@
   export let onRemove: (() => void) | null = null;
 </script>
 
-<div class="outer" style={isMe ? "border-color: #000" : ""}>
+<div class="outer" style={isMe ? "border: solid black 3.5px" : ""}>
   <div class={`name`}>
     {#if name !== ""}
       {name}
