@@ -24,6 +24,8 @@
   function onShareClick() {
     navigator.share({
       url: window.location.origin + "/" + roomcode,
+      title: "Everybody's Jim - CO-OP",
+      text: "Share the link to invite players",
     });
   }
 
