@@ -5,6 +5,7 @@
 
   let isRegistered = false;
 
+  console.log(2);
   initSocketIoClient(
     () => (isRegistered = true),
     () => (isRegistered = false)
@@ -28,5 +29,18 @@
     width: 100vw;
     height: 100vh;
     z-index: -1;
+
+    /* transform-origin: 50% 50%; */
+    /* scale: 2.5; */
+    /* animation: rotate 80s linear infinite; */
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>

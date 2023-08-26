@@ -10,9 +10,9 @@ export function handleSocket(
   game: Game
 ) {
 
-  //=========
-  // checkId
-  //=========
+  //============
+  // registerId
+  //============
   socket.on("registerId", (id, callback) => {
     let user: User | null;
     if (id === null || (user = game.findUserById(id)) === null) {

@@ -35,6 +35,7 @@
 [V] make a cool different color to the name of the player
 [V] ask someone to help you with colors
 [V] check what to do with stupid sharing button
-[ ] add node server to production
+[X] add node server to production
+    * no need to, used vite preview server instead
 [V] remove all console.logs
-[ ] deploy to heroku
+[V] deploy to heroku
