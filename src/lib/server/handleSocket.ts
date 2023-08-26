@@ -13,7 +13,7 @@ export function handleSocket(
   //=========
   // checkId
   //=========
-  socket.on("checkId", (id, callback) => {
+  socket.on("registerId", (id, callback) => {
     let user: User | null;
     if (id === null || (user = game.findUserById(id)) === null) {
       user = game.addUser(socket.id);

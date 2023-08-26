@@ -61,9 +61,11 @@
 
 <Button onClick={onShareClick}>{"Share Room Link"}</Button>
 
-{#if sttData.persNames.length > 0}
-  <Spacer space={30} />
+<Spacer space={30} />
 
+{#if sttData.persNames.length == 0}
+  <div>{"Share the room link to invite players"}</div>
+{:else}
   <PerList
     persNames={sttData.persNames}
     attemptsLeft={sttData.attemptsLeft}

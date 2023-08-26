@@ -8,7 +8,7 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-  checkId: (
+  registerId: (
     id: string | null,
     callback: (idNew: string | null) => void
   ) => void;

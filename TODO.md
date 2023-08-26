@@ -1,3 +1,6 @@
+[V] fix websocket disconnecting 
+[ ] add icon to the share
+[V] add "share link" label
 [V] remove all outlines
 [V] make red buttons
 [V] make spin animation more smooth on mobile
