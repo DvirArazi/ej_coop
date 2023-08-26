@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import Spacer from "/@src/components/spacer.svelte";
   import { SOCKET } from "/@src/lib/client/socketIoClient";
   import { Phase, type PerData } from "/@src/shared/types";
@@ -57,6 +57,10 @@
   onMount(() => {
     name = perData.persNames[perData.index];
     cheat.innerText = name;
+  });
+
+  onDestroy(() => {
+    SOCKET.off("personalityDataUpdated");
   });
 </script>
 

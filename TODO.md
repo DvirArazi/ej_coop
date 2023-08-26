@@ -1,5 +1,6 @@
 [V] fix websocket disconnecting 
-[ ] add icon to the share
+[X] add icon to the share
+    * impossible to change aperrantly
 [V] add "share link" label
 [V] remove all outlines
 [V] make red buttons
@@ -9,7 +10,7 @@
 [V] add a remove from room button
 [V] fix name bug
 [X] fix the new name input bug
-    * Couldn't replicate, not critical, will try again if bug reappears
+    * couldn't replicate, not critical, will try again if bug reappears
 [V] add a cancel spin (X) button
 [V] test if the wheel will roll more smoothly without the updates every second
 [V] fix canvas not re-rendering

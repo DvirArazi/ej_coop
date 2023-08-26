@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from "svelte";
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
   import InstantModal from "/@src/components/instantModal.svelte";
@@ -49,6 +50,10 @@
   function handleRemove(perI: number) {
     SOCKET.emit("removePer", roomcode, perI);
   }
+
+  onDestroy(()=>{
+    SOCKET.off("storytellerDataUpdated");
+  });
 </script>
 
 <Spacer space={20} />

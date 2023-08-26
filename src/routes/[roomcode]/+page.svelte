@@ -6,6 +6,7 @@
   import Storyteller from "/@src/routes/[roomcode]/storyteller.svelte";
   import Personality from "/@src/routes/[roomcode]/personality.svelte";
   import Spacer from "/@src/components/spacer.svelte";
+    import { onDestroy } from "svelte";
 
   export let data: PageData;
 
@@ -26,6 +27,10 @@
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     gameData = gameDataNew;
+  });
+
+  onDestroy(()=>{
+    SOCKET.off("goBack");
   });
 </script>
 
