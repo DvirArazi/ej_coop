@@ -6,7 +6,7 @@
   import Storyteller from "/@src/routes/[roomcode]/storyteller.svelte";
   import Personality from "/@src/routes/[roomcode]/personality.svelte";
   import Spacer from "/@src/components/spacer.svelte";
-    import { onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
 
   export let data: PageData;
 
@@ -21,15 +21,15 @@
     }
   }
 
-  SOCKET.on("goBack", (roomcodeNew)=>{
-    if (roomcode === roomcodeNew) goto('/');
+  SOCKET.on("goBack", (roomcodeNew) => {
+    if (roomcode === roomcodeNew) goto("/");
   });
 
   SOCKET.emit("enterRoom", roomcode, (gameDataNew) => {
     gameData = gameDataNew;
   });
 
-  onDestroy(()=>{
+  onDestroy(() => {
     SOCKET.off("goBack");
   });
 </script>
@@ -40,6 +40,8 @@
 {:else if gameData === null}
   <Spacer space={50} />
   <div>{`Room ${roomcode} could not be found`}</div>
+  <Spacer space={30}/>
+  <a href="/">Go to the main page</a>
 {:else if gameData.isStt}
   <Storyteller {roomcode} sttData={gameData.sttData} />
 {:else}

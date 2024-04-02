@@ -5,7 +5,6 @@
 
   let isRegistered = false;
 
-  console.log(2);
   initSocketIoClient(
     () => (isRegistered = true),
     () => (isRegistered = false)
