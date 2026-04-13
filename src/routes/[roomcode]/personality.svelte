@@ -20,7 +20,7 @@
 
   $: if (cheat !== undefined) {
     cheat.style.display = "block";
-    cheat.innerText = name;
+    cheat.textContent = name;
     isNameInputEmpty = cheat.offsetWidth === 0;
     if (isNameInputEmpty) {
       nameInputWidth = 200;
@@ -127,6 +127,7 @@
 
   .cheat {
     width: min-content;
+    white-space: pre;
   }
 
   input[type="text"],
