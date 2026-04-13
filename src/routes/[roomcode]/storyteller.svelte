@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+  import { onDestroy } from "svelte";
   import Button from "/@src/components/button.svelte";
   import InitModal from "/@src/components/initModal.svelte";
   import InstantModal from "/@src/components/instantModal.svelte";
@@ -15,6 +15,8 @@
   export let sttData: SttData;
 
   let isInitModalOpen = false;
+  let shareFeedback = "";
+  let shareFeedbackTimeout: ReturnType<typeof setTimeout> | null = null;
 
   SOCKET.on("storytellerDataUpdated", (sttDataNew) => {
     if (sttDataNew.roomcode != roomcode) return;
@@ -22,12 +24,54 @@
     sttData = sttDataNew;
   });
 
-  function onShareClick() {
-    navigator.share({
-      url: window.location.origin + "/" + roomcode,
+  function setShareFeedback(message: string) {
+    shareFeedback = message;
+
+    if (shareFeedbackTimeout !== null) {
+      clearTimeout(shareFeedbackTimeout);
+    }
+
+    shareFeedbackTimeout = setTimeout(() => {
+      shareFeedback = "";
+      shareFeedbackTimeout = null;
+    }, 2500);
+  }
+
+  async function copyRoomLink(roomLink: string) {
+    if (navigator.clipboard?.writeText !== undefined) {
+      await navigator.clipboard.writeText(roomLink);
+      return;
+    }
+
+    const input = document.createElement("input");
+    input.value = roomLink;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+  }
+
+  async function onShareClick() {
+    const roomLink = window.location.origin + "/" + roomcode;
+    const shareData = {
+      url: roomLink,
       title: "Everybody's Jim - CO-OP",
       text: "Share the link to invite players",
-    });
+    };
+
+    if (navigator.share !== undefined) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+      }
+    }
+
+    await copyRoomLink(roomLink);
+    setShareFeedback("Room link copied");
   }
 
   function handleRiskSet(risk: number | boolean) {
@@ -51,8 +95,11 @@
     SOCKET.emit("removePer", roomcode, perI);
   }
 
-  onDestroy(()=>{
+  onDestroy(() => {
     SOCKET.off("storytellerDataUpdated");
+    if (shareFeedbackTimeout !== null) {
+      clearTimeout(shareFeedbackTimeout);
+    }
   });
 </script>
 
@@ -67,6 +114,11 @@
 <Spacer space={30} />
 
 <Button onClick={onShareClick}>{"Share Room Link"}</Button>
+
+{#if shareFeedback !== ""}
+  <Spacer space={10} />
+  <div class="share-feedback">{shareFeedback}</div>
+{/if}
 
 <Spacer space={30} />
 
@@ -88,6 +140,13 @@
     {"Start Action"}
   </Button>
 {/if}
+
+<style>
+  .share-feedback {
+    color: #a2e8ff;
+    font-family: "Rubik";
+  }
+</style>
 
 <Spacer space={30} />
 
