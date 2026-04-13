@@ -25,15 +25,25 @@ async function loadSocketServerInit() {
 
 const initSocketIoServer = await loadSocketServerInit();
 
-const socketPath = process.env.SOCKET_PATH;
+const listenPath = process.env.SOCKET_PATH;
 const host = process.env.HOST ?? "0.0.0.0";
 const port = Number(process.env.PORT ?? 3000);
+const socketIoPath = "/socket.io/";
 
 const server = http.createServer();
 
 initSocketIoServer(server);
-server.on("request", handler);
+server.on("request", (req, res) => {
+  const pathname = new URL(req.url ?? "/", "http://127.0.0.1").pathname;
 
-server.listen(socketPath ? { path: socketPath } : { host, port }, () => {
-  console.log(`Listening on ${socketPath ?? `${host}:${port}`}`);
+  // Engine.IO handles polling requests over plain HTTP on the Socket.IO path.
+  if (pathname === "/socket.io" || pathname.startsWith(socketIoPath)) {
+    return;
+  }
+
+  handler(req, res);
+});
+
+server.listen(listenPath ? { path: listenPath } : { host, port }, () => {
+  console.log(`Listening on ${listenPath ?? `${host}:${port}`}`);
 });
