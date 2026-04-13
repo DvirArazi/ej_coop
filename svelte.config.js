@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -13,9 +13,24 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 
+		typescript: {
+			config: (generatedConfig) => {
+				const { compilerOptions } = generatedConfig;
+
+				if (!compilerOptions) return generatedConfig;
+
+				delete compilerOptions.importsNotUsedAsValues;
+				delete compilerOptions.preserveValueImports;
+				compilerOptions.verbatimModuleSyntax = true;
+				compilerOptions.moduleResolution = 'bundler';
+
+				return generatedConfig;
+			}
+		},
 
 		alias: {
-			'/@src': 'src'
+			'/@src': 'src',
+			'@src': 'src'
 		},
 	},
 };
