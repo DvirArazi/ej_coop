@@ -35,10 +35,9 @@
     if (perDataNew.roomcode != roomcode) return;
 
     perData = perDataNew;
-    name = perData.persNames[perData.index];
   });
 
-  function handleNameInput(event: Event) {
+  function handleNameInput() {
     SOCKET.emit("updateName", name);
   }
 
